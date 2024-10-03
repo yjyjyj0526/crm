@@ -1,0 +1,97 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.interline.crm.dao.ManagerDAO">
+
+    <insert id="registerManager" parameterType="jp.co.interline.crm.domain.ClientManager">
+        insert into ClientManager
+            (manager_name,
+            company_id,
+            department,
+            position,
+            manager_age,
+            manager_mail,
+            phone_number_1,
+            phone_number_2,
+            register_member_id,
+            registration_date)
+        values
+            (#{manager_name},
+            #{company_id},
+            #{department},
+            #{position},
+            #{manager_age},
+            #{manager_mail},
+            #{phone_number_1},
+            #{phone_number_2},
+            #{register_member_id},
+            #{registration_date})
+    </insert>
+    <update id="updateManager" parameterType="jp.co.interline.crm.domain.ClientManager">
+        update ClientManager set
+            manager_name = #{manager_name},
+            company_id = #{company_id},
+            department = #{department},
+            position = #{position},
+            manager_age = #{manager_age},
+            manager_mail = #{manager_mail},
+            phone_number_1 = #{phone_number_1},
+            phone_number_2 = #{phone_number_2},
+            update_member_id = #{update_member_id},
+            update_date = #{update_date}
+        where
+            manager_id = #{manager_id}
+    </update>
+
+    <delete id="managerDelete">
+        delete from ClientManager where manager_id = #{manager_id}
+    </delete>
+
+    <select id="managerList" parameterType="hashmap" resultType="jp.co.interline.crm.domain.ClientManager">
+        SELECT *
+        FROM ClientManager
+        WHERE
+        <if test="categorySelect == null or categorySelect == ''">
+            <if test="searchText != null and searchText != ''">
+                (company_id LIKE CONCAT('%', #{searchText}, '%') OR company_name LIKE CONCAT('%', #{searchText}, '%'))
+            </if>
+        </if>
+        ORDER BY
+        <choose>
+            <when test="order == 'manager_id'">
+                manager_id <if test="orderDirection != null and orderDirection == 'DESC'">DESC</if><if test="orderDirection == null or orderDirection == 'ASC'">ASC</if>
+            </when>
+            <when test="order == 'manager_name'">
+                manager_name <if test="orderDirection != null and orderDirection == 'DESC'">DESC</if><if test="orderDirection == null or orderDirection == 'ASC'">ASC</if>
+            </when>
+            <otherwise>manager_id ASC</otherwise>
+        </choose>
+    </select>
+
+    <select id="getTotal" parameterType="hashmap" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM ClientManager
+        WHERE
+        <if test="categorySelect != null and categorySelect != ''">
+            <choose>
+                <when test="categorySelect == 'manager_id'">
+                    manager_id LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="categorySelect == 'manager_name'">
+                    AND manager_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+            </choose>
+        </if>
+        <if test="categorySelect == null or categorySelect == ''">
+            <if test="searchText != null and searchText != ''">
+                AND (manager_id LIKE CONCAT('%', #{searchText}, '%') OR manager_name LIKE CONCAT('%', #{searchText}, '%'))
+            </if>
+        </if>
+    </select>
+
+    <select id="managerDetails" resultType="jp.co.interline.crm.domain.ClientManager">
+        select * from ClientManager where manager_id = #{manager_id}
+    </select>
+
+
+</mapper>

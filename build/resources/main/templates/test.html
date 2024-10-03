@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>顧客管理システム</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar {
+            width: 200px;
+            height: 100vh;
+            background-color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        .sidebar a {
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            text-align: center;
+            margin-bottom: 10px;
+            background-color: #444;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover {
+            background-color: #555;
+        }
+
+        .window {
+            position: absolute;
+            width: 300px;
+            height: 200px;
+            border: 1px solid #ccc;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            resize: both;
+            overflow: hidden;
+            display: none;
+        }
+
+        .window-header {
+            background-color: #f1f1f1;
+            padding: 10px;
+            cursor: move;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .window-content {
+            padding: 10px;
+        }
+
+        .window-resize-handle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            bottom: 0;
+            right: 0;
+            cursor: se-resize;
+        }
+
+        .close-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a onclick="openWindow('window1')">社員管理</a>
+    <a onclick="openWindow('window2')">顧客管理</a>
+    <a onclick="openWindow('window3')">顧客社管理</a>
+    <a onclick="openWindow('window4')">コンタクト管理</a>
+</div>
+
+<!-- Window 1 -->
+<div class="window" id="window1">
+    <div class="window-header">
+        <span class="title">社員管理</span>
+        <button class="close-btn" onclick="closeWindow('window1')">X</button>
+    </div>
+    <div class="window-content">
+        <p>社員管理</p>
+    </div>
+    <div class="window-resize-handle"></div>
+</div>
+
+<!-- Window 2 -->
+<div class="window" id="window2">
+    <div class="window-header">
+        <span class="title">顧客管理</span>
+        <button class="close-btn" onclick="closeWindow('window2')">X</button>
+    </div>
+    <div class="window-content">
+        <p>顧客管理</p>
+    </div>
+    <div class="window-resize-handle"></div>
+</div>
+
+<!-- Window 3 -->
+<div class="window" id="window3">
+    <div class="window-header">
+        <span class="title">顧客社管理</span>
+        <button class="close-btn" onclick="closeWindow('window3')">X</button>
+    </div>
+    <div class="window-content">
+        <p>顧客社管理</p>
+    </div>
+    <div class="window-resize-handle"></div>
+</div>
+
+<!-- Window 4 -->
+<div class="window" id="window4">
+    <div class="window-header">
+        <span class="title">コンタクト管理</span>
+        <button class="close-btn" onclick="closeWindow('window4')">X</button>
+    </div>
+    <div class="window-content">
+        <p>コンタクト管理</p>
+    </div>
+    <div class="window-resize-handle"></div>
+</div>
+
+<script>
+    // Function to open windows
+    function openWindow(id) {
+        const window = document.getElementById(id);
+        window.style.display = 'block';
+        window.style.zIndex = 1000; // Bring the window to the front
+    }
+
+    // Function to close windows
+    function closeWindow(id) {
+        const window = document.getElementById(id);
+        window.style.display = 'none';
+    }
+
+    // Draggable and Resizable functionality
+    const windows = document.querySelectorAll('.window');
+
+    // Dragging functionality
+    windows.forEach(window => {
+        const header = window.querySelector('.window-header');
+        
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        header.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            offsetX = e.clientX - window.offsetLeft;
+            offsetY = e.clientY - window.offsetTop;
+            window.style.zIndex = 1000; // Bring the window to the front
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                window.style.left = `${e.clientX - offsetX}px`;
+                window.style.top = `${e.clientY - offsetY}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+    });
+
+    // Resizing functionality
+    windows.forEach(window => {
+        const resizeHandle = window.querySelector('.window-resize-handle');
+        let isResizing = false;
+
+        resizeHandle.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            document.addEventListener('mousemove', resize);
+            document.addEventListener('mouseup', stopResize);
+        });
+
+        function resize(e) {
+            if (isResizing) {
+                window.style.width = `${e.clientX - window.offsetLeft}px`;
+                window.style.height = `${e.clientY - window.offsetTop}px`;
+            }
+        }
+
+        function stopResize() {
+            isResizing = false;
+            document.removeEventListener('mousemove', resize);
+            document.removeEventListener('mouseup', stopResize);
+        }
+    });
+</script>
+
+</body>
+</html>

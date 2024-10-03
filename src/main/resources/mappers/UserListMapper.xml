@@ -1,0 +1,108 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.interline.crm.dao.UserListDAO">
+
+    <select id="managerDetails" resultType="String">
+        select user_id from UserList where user_id = "manager"
+    </select>
+
+    <insert id="insertManager" parameterType="jp.co.interline.crm.domain.UserList">
+        insert into UserList
+            (user_id, user_name, password, authority, registration_date, register_member_id)
+        values
+            (#{user_id}, #{user_name}, #{password}, #{authority}, #{registration_date}, #{register_member_id})
+    </insert>
+
+    <insert id="joinUser" parameterType="jp.co.interline.crm.domain.UserList">
+        insert into UserList
+            (user_id,
+            user_name,
+            password,
+            phone_number,
+            department,
+            authority,
+            register_member_id,
+            registration_date)
+        values
+            (#{user_id},
+            #{user_name},
+            #{password},
+            #{phone_number},
+            #{department},
+            #{authority},
+            #{register_member_id},
+            #{registration_date})
+    </insert>
+
+    <select id="findUserID" resultType="String" parameterType="String">
+        select user_id from UserList where user_id = #{user_id}
+    </select>
+
+    <update id="updateUser" parameterType="jp.co.interline.crm.domain.UserList">
+        update UserList set
+            password = #{password},
+            user_name = #{user_name},
+            phone_number = #{phone_number},
+            department = #{department},
+            authority = #{authority},
+            update_member_id = #{update_member_id},
+            update_date = #{update_date}
+        where
+            user_id = #{user_id}
+    </update>
+
+    <select id="checkUser" resultType="String" parameterType="String">
+        select password from UserList where user_id = #{user_id}
+    </select>
+
+    <select id="userList" parameterType="hashmap" resultType="jp.co.interline.crm.domain.UserList">
+        SELECT *
+        FROM UserList
+        WHERE authority IN (1,2) AND enabled = 1
+        <if test="categorySelect == null or categorySelect == ''">
+            <if test="searchText != null and searchText != ''">
+                AND (user_id LIKE CONCAT('%', #{searchText}, '%') OR user_name LIKE CONCAT('%', #{searchText}, '%'))
+            </if>
+        </if>
+        ORDER BY
+        <choose>
+            <when test="order == 'user_id'">
+                user_id <if test="orderDirection != null and orderDirection == 'DESC'">DESC</if><if test="orderDirection == null or orderDirection == 'ASC'">ASC</if>
+            </when>
+            <when test="order == 'user_name'">
+                user_name <if test="orderDirection != null and orderDirection == 'DESC'">DESC</if><if test="orderDirection == null or orderDirection == 'ASC'">ASC</if>
+            </when>
+            <otherwise>user_id ASC</otherwise>
+        </choose>
+    </select>
+
+    <select id="getTotal" parameterType="hashmap" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM UserList
+        WHERE authority IN (1,2) AND enabled = 1
+        <if test="categorySelect != null and categorySelect != ''">
+            <choose>
+                <when test="categorySelect == 'user_id'">
+                    AND user_id LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="categorySelect == 'user_name'">
+                    AND user_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+            </choose>
+        </if>
+        <if test="categorySelect == null or categorySelect == ''">
+            <if test="searchText != null and searchText != ''">
+                AND (user_id LIKE CONCAT('%', #{searchText}, '%') OR user_name LIKE CONCAT('%', #{searchText}, '%'))
+            </if>
+        </if>
+    </select>
+
+    <select id="userDetails" resultType="jp.co.interline.crm.domain.UserList">
+        select * from UserList where authority IN (1,2) and user_id = #{user_id} and enabled = 1
+    </select>
+
+    <delete id="userDelete">
+        delete from UserList where user_id = #{user_id}
+    </delete>
+</mapper>

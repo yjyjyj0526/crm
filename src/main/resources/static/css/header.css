@@ -1,0 +1,118 @@
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        #sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            background-color: #343a40;
+            padding-top: 20px;
+            transition: width 0.3s;
+            z-index: 1;
+        }
+
+        #sidebar.collapsed {
+            width: 50px;
+        }
+
+        #sidebar .nav-link {
+            color: #ffffff;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+
+        #sidebar .nav-link:hover {
+            background-color: #495057;
+        }
+
+        #sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+        #sidebar.collapsed .nav-link span {
+            display: none;
+        }
+
+        #main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s;
+            min-height: 100vh;
+            z-index: 0;
+        }
+
+        #main-content.collapsed {
+            margin-left: 50px;
+        }
+
+        .navbar {
+            margin-left: 250px;
+            background-color: #6c757d;
+            transition: margin-left 0.3s;
+            z-index: 2;
+            position: sticky;
+            top: 0;
+        }
+
+        .navbar.collapsed {
+            margin-left: 50px;
+        }
+
+        .navbar .nav-link {
+            color: #ffffff;
+        }
+
+        .navbar .nav-link:hover {
+            color: #f8f9fa;
+        }
+
+        #sidebarToggle {
+            position: absolute;
+            top: 50%;
+            right: -15px;
+            transform: translateY(-50%);
+            border: none;
+            background-color: #495057;
+            color: white;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        #sidebarToggle.collapsed {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            #sidebar {
+                width: 50px;
+            }
+
+            #main-content {
+                margin-left: 50px;
+            }
+
+            .navbar {
+                margin-left: 50px;
+            }
+
+            #sidebar .nav-link span {
+                display: none;
+            }
+
+            #sidebarToggle {
+                right: -10px;
+            }
+        }

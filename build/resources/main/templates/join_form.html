@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<div th:fragment="join_form">
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">社員登録</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="joinForm" method="post" action="/user/join">
+                        <div class="mb-3">
+                            <label for="user_id" class="form-label">社員ID</label>
+                            <input type="text" class="form-control" id="user_id" name="user_id" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="user_name" class="form-label">社員名</label>
+                            <input type="text" class="form-control" id="user_name" name="user_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">パスワード</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone_number" class="form-label">電話番号</label>
+                            <input type="text" class="form-control" id="phone_number" name="phone_number">
+                        </div>
+                        <div class="mb-3">
+                            <label for="department" class="form-label">部署</label>
+                            <input type="text" class="form-control" id="department" name="department">
+                        </div>
+                        <div class="mb-3">
+                            <label for="authority" class="form-label">権限</label>
+                            <select class="form-select" id="authority" name="authority" required>
+                                <option value="1">管理者</option>
+                                <option value="2">部署管理者</option>
+                                <option value="3">部署ユーザー</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="register_member_id" th:value="${#authentication.name}">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">とじる</button>
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('joinForm').submit();">登録</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
