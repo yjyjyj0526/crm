@@ -1,118 +1,117 @@
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow-x: hidden;
-        }
+/* 사이드바 */
+#sidebar {
+    height: 100vh; /* 전체 높이 유지 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px; /* 사이드바 너비 */
+    background-color: #54585a; /* 검은색 배경 */
+    padding-top: 20px;
+    transition: width 0.3s ease;
+    z-index: 1;
+}
 
-        #sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            background-color: #343a40;
-            padding-top: 20px;
-            transition: width 0.3s;
-            z-index: 1;
-        }
+#header {
+    position: fixed; /* 헤더 고정 */
+    top: 0;
+    left: 250px; /* 사이드바 너비에 맞게 조정 */
+    right: 0; /* 전체 너비 */
+    transition: left 0.3s, width 0.3s;
+    z-index: 2;
+}
 
-        #sidebar.collapsed {
-            width: 50px;
-        }
+#sidebar.collapsed {
+    width: 50px; /* 축소된 너비 */
+}
 
-        #sidebar .nav-link {
-            color: #ffffff;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-        }
+#header.collapsed {
+    left: 50px; /* 축소된 사이드바에 맞게 헤더 위치 조정 */
+    width: calc(100% - 50px); /* 너비 조정 */
+}
 
-        #sidebar .nav-link:hover {
-            background-color: #495057;
-        }
+.navbar-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 !important;
+    height: 40px;
+}
+.navbar-brand-img {
+    height: 20px;
+}
+.navbar-brand-text {
+    color:white;
+}
 
-        #sidebar .nav-link i {
-            margin-right: 10px;
-        }
+/* 사이드바 텍스트 색상 변경 */
+.nav-link {
+    color: white; /* 흰색 글씨로 변경 */
+}
 
-        #sidebar.collapsed .nav-link span {
-            display: none;
-        }
+.nav-link:visited {
+    color: white;
+}
 
-        #main-content {
-            margin-left: 250px;
-            padding: 20px;
-            transition: margin-left 0.3s;
-            min-height: 100vh;
-            z-index: 0;
-        }
+.nav-link:active {
+    color: white;
+}
 
-        #main-content.collapsed {
-            margin-left: 50px;
-        }
+#sidebar.collapsed .nav-link span {
+    display: none; /* 접혔을 때 텍스트 숨김 */
+}
 
-        .navbar {
-            margin-left: 250px;
-            background-color: #6c757d;
-            transition: margin-left 0.3s;
-            z-index: 2;
-            position: sticky;
-            top: 0;
-        }
+.nav-link:hover {
+    color: gray; /* 호버 시 색상 */
+}
 
-        .navbar.collapsed {
-            margin-left: 50px;
-        }
+/* 하위 메뉴 설정 */
+.collapse {
+    display: none;
+}
 
-        .navbar .nav-link {
-            color: #ffffff;
-        }
+.collapse.show {
+    display: block;
+}
 
-        .navbar .nav-link:hover {
-            color: #f8f9fa;
-        }
+/* 헤더 */
+.navbar {
+    background-color: #707372; /* 흰색 배경으로 변경 */
+    transition: left 0.3s, width 0.3s;
+    z-index: 2;
+}
 
-        #sidebarToggle {
-            position: absolute;
-            top: 50%;
-            right: -15px;
-            transform: translateY(-50%);
-            border: none;
-            background-color: #495057;
-            color: white;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border-radius: 50%;
-            transition: transform 0.3s;
-        }
+.navbar .nav-link {
+    color: black; /* 검은색 글씨로 변경 */
+}
 
-        #sidebarToggle.collapsed {
-            transform: translateY(-50%) rotate(180deg);
-        }
+/* 메인 콘텐츠 */
+#main-content {
+    margin-left: 250px;
+    margin-top: 60px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+    min-height: 100vh;
+}
 
-        @media (max-width: 768px) {
-            #sidebar {
-                width: 50px;
-            }
+#main-content.collapsed {
+    margin-left: 50px; /* 사이드바 축소 시 콘텐츠 위치 조정 */
+}
 
-            #main-content {
-                margin-left: 50px;
-            }
+/* 사이드바 토글 버튼 */
+#sidebarToggle {
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    transform: translateY(-50%);
+    z-index: 2;
+    background-color: #6c757d;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
 
-            .navbar {
-                margin-left: 50px;
-            }
-
-            #sidebar .nav-link span {
-                display: none;
-            }
-
-            #sidebarToggle {
-                right: -10px;
-            }
-        }
+#sidebarToggle i {
+    font-size: 24px;
+    color: white;
+}

@@ -1,84 +1,263 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM Dashboard</title>
+    <title>CRM 대시보드</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="/css/header.css" rel="stylesheet" type="text/css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8; /* 연한 회색 배경 */
+            color: #333;
+            display: flex;
+        }
+
+        /* 사이드바 스타일 */
+        #sidebar {
+            width: 80px;
+            height: 100vh;
+            background-color: #f0f4f8; /* 메인 콘텐츠와 동일한 색상 */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            transition: width 0.3s ease;
+        }
+
+        #sidebar.expanded {
+            width: 200px; /* 사이드바 확장 시 너비 */
+        }
+
+        #sidebar .logo {
+            margin-bottom: 30px;
+        }
+
+        #sidebar .hamburger {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px; /* 햄버거 아이콘 크기 */
+            cursor: pointer;
+            margin-bottom: 20px; /* 아이콘과 메뉴 사이 여백 */
+        }
+
+        #sidebar .nav {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        #sidebar .nav-item {
+            width: 100%;
+        }
+
+        #sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 중앙 정렬 */
+            padding: 10px;
+            transition: background-color 0.3s;
+            font-size: 24px; /* 아이콘 크기 증가 */
+            color: black; /* 아이콘 색상 */
+        }
+
+        #sidebar .nav-link:hover {
+            background-color: #f0f4f8;
+            border-radius: 8px;
+        }
+
+        #sidebar .nav-text {
+            display: none; /* 기본적으로 메뉴 텍스트 숨기기 */
+            margin-left: 10px; /* 아이콘과 텍스트 사이의 간격 */
+        }
+
+        #sidebar.expanded .nav-text {
+            display: block; /* 사이드바 확장 시 텍스트 보이기 */
+        }
+
+        /* 헤더 스타일 */
+        header {
+            width: calc(100% - 100px); /* 사이드바 크기와 여백 조정 */
+            height: 60px; /* 헤더 높이 */
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 20px; /* 상단에 여백 추가 */
+            left: 90px; /* 사이드바 오른쪽에 약간의 여백 추가 */
+            border-radius: 30px; /* 모든 모서리를 둥글게 */
+            margin-right: 20px; /* 오른쪽 여백 추가 */
+            transition: width 0.3s, left 0.3s; /* 헤더 이동과 너비 변화 애니메이션 */
+        }
+
+        header.expanded {
+            width: calc(100% - 210px); /* 사이드바가 확장될 때 헤더 너비 */
+            left: 200px; /* 헤더가 사이드바에 맞춰 이동 */
+        }
+
+        header.collapsed {
+            width: calc(100% - 90px); /* 사이드바가 접힐 때 헤더 너비 */
+            left: 90px; /* 헤더를 사이드바의 오른쪽에 위치시킴 */
+        }
+
+        /* 검색바 스타일 */
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-right: 10px;
+        }
+
+        /* 구분선 스타일 */
+        .separator {
+            width: 1px;
+            height: 20px;
+            background-color: lightgray; /* 연한 회색 */
+            margin: 0 10px; /* 여백 추가 */
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-profile img {
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* 콘텐츠 스타일 */
+        .content {
+            margin-left: 80px; /* 사이드바 크기만큼 왼쪽 여백 */
+            margin-top: 100px; /* 헤더와 메인 콘텐츠 사이의 여백 (헤더 높이 + 여백) */
+            padding: 20px;
+            width: calc(100% - 80px);
+            transition: width 0.3s; /* 콘텐츠 넓이 애니메이션 */
+        }
+
+        .content.collapsed {
+            margin-left: 200px; /* 사이드바가 확장될 때 콘텐츠 여백 조정 */
+            width: calc(100% - 200px); /* 콘텐츠 넓이 조정 */
+        }
+    </style>
 </head>
 <body>
 <header th:fragment="header">
-    <div th:insert="~{join_form :: join_form}"></div>
-<!-- 사이드바 -->
-<nav id="sidebar">
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
-                <i class="bi bi-house-door-fill"></i> <span>ホーム</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop">社員登録</a>
-        </li>
-        <li class="nav-item" sec:authorize="hasAuthority(1)">
-            <a class="nav-link" href="#">
-                <i class="bi bi-person-badge"></i> <span>社員</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="bi bi-building"></i> <span>顧客社</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="bi bi-people-fill"></i> <span>顧客</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="bi bi-chat-dots-fill"></i> <span>コンタクト</span>
-            </a>
-        </li>
-    </ul>
-    <button id="sidebarToggle" class="btn">
-        <i class="bi bi-chevron-left"></i>
-    </button>
-</nav>
-
-<!-- 헤더 -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">顧客管理システム</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="logo">
+        <h2>顧客管理システム</h2>
+    </div>
+    <div class="search-bar">
+        <input type="text" placeholder="Search Here">
+        <button type="button" class="btn btn-light">Search</button>
+        <div class="separator"></div> <!-- 구분선 추가 -->
+        <div class="user-profile">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Home</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="#">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
                 </li>
             </ul>
         </div>
     </div>
-</nav>
-
-<div id="main-content" class="container-fluid">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">ダッシュボード</h1>
-    </div>
-    <p>ダッシュボード</p>
-</div>
 </header>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script src="/js/header.js"></script>
+
+<!-- 사이드바 -->
+<aside id="sidebar">
+    <div class="hamburger" onclick="toggleSidebar()">
+        <i class="bi bi-list"></i> <!-- 햄버거 아이콘 -->
+    </div>
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">
+                <i class="bi bi-house-door-fill"></i>
+                <span class="nav-text">대시보드</span> <!-- 메뉴 텍스트 -->
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" onclick="toggleSubMenu('employeeMenu')">
+                <i class="bi bi-person-badge"></i>
+                <span class="nav-text">직원</span>
+            </a>
+            <ul id="employeeMenu" class="nav flex-column collapse">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> - 社員登録</a>
+                    <a class="nav-link" href="/user/list"> - 社員一覧</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" onclick="toggleSubMenu('companyMenu')">
+                <i class="bi bi-building"></i>
+                <span class="nav-text">고객사</span>
+            </a>
+            <ul id="companyMenu" class="nav flex-column collapse">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"> - 顧客社登録</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" onclick="toggleSubMenu('customerMenu')">
+                <i class="bi bi-people-fill"></i>
+                <span class="nav-text">고객</span>
+            </a>
+            <ul id="customerMenu" class="nav flex-column collapse">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"> - 顧客登録</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" onclick="toggleSubMenu('contactMenu')">
+                <i class="bi bi-chat-dots-fill"></i>
+                <span class="nav-text">콘텍트</span>
+            </a>
+            <ul id="contactMenu" class="nav flex-column collapse">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"> - コンタクト履歴</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</aside>
+
+<!-- 메인 콘텐츠 -->
+<main class="content">
+    <h2>계속 바뀌는 부분쓰</h2>
+</main>
+
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const header = document.querySelector('header');
+    const content = document.querySelector('.content');
+
+    function toggleSidebar() {
+        const isExpanded = sidebar.classList.toggle('expanded'); // 사이드바의 'expanded' 클래스 토글
+        header.classList.toggle('expanded', isExpanded); // 헤더의 'expanded' 클래스 토글
+        content.classList.toggle('expanded', isExpanded); // 콘텐츠의 'expanded' 클래스 토글
+    }
+
+    function toggleSubMenu(menuId) {
+        const menu = document.getElementById(menuId);
+        menu.classList.toggle('collapse'); // 서브메뉴의 'collapse' 클래스 토글
+    }
+</script>
 </body>
 </html>
+

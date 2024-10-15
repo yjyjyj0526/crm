@@ -52,4 +52,57 @@
             user_id = #{user_id}
     </update>
 
+    <select id="checkUser" resultType="String" parameterType="String">
+        select password from UserList where user_id = #{user_id}
+    </select>
+
+    <select id="userList" parameterType="hashmap" resultType="jp.co.interline.crm.domain.UserList">
+        SELECT *
+        FROM UserList
+        WHERE authority IN (1,2) AND enabled = 1
+        <if test="categorySelect == null or categorySelect == ''">
+            <if test="searchText != null and searchText != ''">
+                AND (user_id LIKE CONCAT('%', #{searchText}, '%') OR user_name LIKE CONCAT('%', #{searchText}, '%'))
+            </if>
+        </if>
+        ORDER BY
+        <choose>
+            <when test="order == 'user_id'">
+                user_id <if test="orderDirection != null and orderDirection == 'DESC'">DESC</if><if test="orderDirection == null or orderDirection == 'ASC'">ASC</if>
+            </when>
+            <when test="order == 'user_name'">
+                user_name <if test="orderDirection != null and orderDirection == 'DESC'">DESC</if><if test="orderDirection == null or orderDirection == 'ASC'">ASC</if>
+            </when>
+            <otherwise>user_id ASC</otherwise>
+        </choose>
+    </select>
+
+    <select id="getTotal" parameterType="hashmap" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM UserList
+        WHERE authority IN (1,2) AND enabled = 1
+        <if test="categorySelect != null and categorySelect != ''">
+            <choose>
+                <when test="categorySelect == 'user_id'">
+                    AND user_id LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="categorySelect == 'user_name'">
+                    AND user_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+            </choose>
+        </if>
+        <if test="categorySelect == null or categorySelect == ''">
+            <if test="searchText != null and searchText != ''">
+                AND (user_id LIKE CONCAT('%', #{searchText}, '%') OR user_name LIKE CONCAT('%', #{searchText}, '%'))
+            </if>
+        </if>
+    </select>
+
+    <select id="userDetails" resultType="jp.co.interline.crm.domain.UserList">
+        select * from UserList where authority IN (1,2) and user_id = #{user_id} and enabled = 1
+    </select>
+
+    <delete id="userDelete">
+        delete from UserList where user_id = #{user_id}
+    </delete>
 </mapper>

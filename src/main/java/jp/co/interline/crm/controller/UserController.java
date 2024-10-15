@@ -103,13 +103,14 @@ public class UserController {
     }
     //社員リスト
     @GetMapping("/user/list")
-    public ResponseEntity<?> userListForManager(@RequestParam(defaultValue = "1") int page,
-                                     @RequestParam(name="categorySelect", required = false) String categorySelect,
-                                     @RequestParam(name="searchText", required = false) String searchText,
-                                     @RequestParam(name="order", required = false) String order,
-                                     @RequestParam(name="orderDirection", required = false, defaultValue = "ASC") String orderDirection,
-                                     @RequestParam(name="countPerPage", required = false, defaultValue = "10") int countPerPage,
-                                     Model model) {
+    public String userListForManager(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(name = "categorySelect", required = false) String categorySelect,
+            @RequestParam(name = "searchText", required = false) String searchText,
+            @RequestParam(name = "order", required = false) String order,
+            @RequestParam(name = "orderDirection", required = false, defaultValue = "ASC") String orderDirection,
+            @RequestParam(name = "countPerPage", required = false, defaultValue = "10") int countPerPage,
+            Model model) {
         int pagePerGroup = 5;
 
         PagenationUtil navi = service.getPageNavigator(pagePerGroup, countPerPage, page, categorySelect, searchText);
@@ -123,7 +124,7 @@ public class UserController {
         model.addAttribute("searchText", searchText);
         model.addAttribute("countPerPage", countPerPage);
 
-        return ResponseEntity.ok(list);
+        return "user_list"; // HTML 뷰 이름
     }
     //社員詳細
     @GetMapping("/user/detail/{user_id}")

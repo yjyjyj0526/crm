@@ -1,0 +1,91 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.interline.crm.dao.ContactDAO">
+<!-- 전체적으로 확인 필요 -->
+    <insert id="registerContact" parameterType="jp.co.interline.crm.domain.ContactHistory">
+        insert into ContactHistory
+            (manager_id,
+            user_id_1,
+            user_id_2,
+            user_id_3,
+            contact_method,
+            contact_date,
+            contact_details,
+            register_member_id,
+            registration_date)
+        values
+            (#{manager_id},
+            #{user_id_1},
+            #{user_id_2},
+            #{user_id_3},
+            #{contact_method},
+            #{contact_date},
+            #{contact_details},
+            #{register_member_id},
+            #{registration_date})
+    </insert>
+    <update id="updateContact" parameterType="jp.co.interline.crm.domain.ContactHistory">
+        update ContactHistory set
+            manager_id = #{manager_id},
+            user_id_1 = #{user_id_1},
+            user_id_2 = #{user_id_2},
+            user_id_3 = #{user_id_3},
+            contact_method = #{contact_method},
+            contact_date = #{contact_date},
+            contact_details = #{contact_details},
+            update_member_id  = #{update_member_id},
+            update_date = #{update_date}
+        where
+            contact_id = #{contact_id}
+    </update>
+    <delete id="deleteContact">
+        delete from ContactHistory where contact_id = #{contact_id}
+    </delete>
+    <select id="contactList" parameterType="hashmap" resultType="jp.co.interline.crm.domain.ContactHistory">
+        SELECT *
+        FROM ContactHistory
+        WHERE
+        <if test="categorySelect == null or categorySelect == ''">
+            <if test="searchText != null and searchText != ''">
+                (contact_id LIKE CONCAT('%', #{searchText}, '%') OR contact_details LIKE CONCAT('%', #{searchText}, '%'))
+            </if>
+        </if>
+        ORDER BY
+        <choose>
+            <when test="order == 'contact_id'">
+                contact_id <if test="orderDirection != null and orderDirection == 'DESC'">DESC</if><if test="orderDirection == null or orderDirection == 'ASC'">ASC</if>
+            </when>
+<!--            <when test="order == 'company_name'">-->
+<!--                company_name <if test="orderDirection != null and orderDirection == 'DESC'">DESC</if><if test="orderDirection == null or orderDirection == 'ASC'">ASC</if>-->
+<!--            </when>-->
+            <otherwise>contact_id ASC</otherwise>
+        </choose>
+    </select>
+
+    <select id="getTotal" parameterType="hashmap" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM ContactHistory
+        WHERE
+        <if test="categorySelect != null and categorySelect != ''">
+            <choose>
+                <when test="categorySelect == 'company_id'">
+                    contact_id LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+<!--                <when test="categorySelect == 'company_name'">-->
+<!--                    AND company_name LIKE CONCAT('%', #{searchText}, '%')-->
+<!--                </when>-->
+            </choose>
+        </if>
+        <if test="categorySelect == null or categorySelect == ''">
+            <if test="searchText != null and searchText != ''">
+                AND contact_id LIKE CONCAT('%', #{searchText}, '%')
+<!--                OR company_name LIKE CONCAT('%', #{searchText}, '%'))-->
+            </if>
+        </if>
+    </select>
+
+    <select id="contactDetails" resultType="jp.co.interline.crm.domain.ContactHistory">
+        select * from ContactHistory where contact_id = #{contact_id}
+    </select>
+</mapper>
