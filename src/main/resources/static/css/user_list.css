@@ -1,8 +1,25 @@
 body {
-    background-color: #b2b4b2;
     color: #212529;
     margin: 0;
     padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.table-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .table {
@@ -16,8 +33,71 @@ body {
 
 .table th, .table td {
     vertical-align: middle;
+    font-size: 18px; /* 텍스트 크기 키움 */
 }
 
 .pagination-container {
     margin-top: 20px;
+}
+
+/* 등록 폼 스타일 */
+.register-form {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 400px;
+    height: 100%;
+    background-color: #ffffff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: right 0.3s ease;
+}
+
+.register-form.open {
+    right: 0;
+}
+
+.content.shrink {
+    margin-left: -400px; /* 폼 나올 때 왼쪽으로 밀리는 효과 */
+    transition: margin-left 0.3s ease;
+}
+
+body {
+    color: #212529;
+    margin: 0;
+    padding: 0;
+}
+
+.table {
+    background-color: #ffffff;
+    width: 90%; /* 테이블 너비 증가 */
+    margin: auto; /* 테이블 중앙 정렬 */
+}
+
+.table-dark {
+    background-color: #343a40;
+    color: white;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.pagination-container {
+    margin-top: 20px;
+}
+
+#registrationForm {
+    width: 300px; /* 등록폼 너비 */
+    position: absolute;
+    right: 20px; /* 오른쪽 위치 */
+    top: 100px; /* 위에서의 위치 */
+    background-color: white; /* 배경색 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 */
+    padding: 20px; /* 패딩 */
+}
+
+.shrink {
+    width: calc(90% - 300px); /* 등록 폼의 너비에 따라 조정 */
 }

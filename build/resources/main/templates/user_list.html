@@ -11,50 +11,82 @@
 </head>
 <body>
 <div th:insert="~{header :: header}"></div>
-<div class="container mt-5">
-  <h2 class="text-center">ユーザーリスト</h2>
-  <table class="table table-bordered table-hover mt-3">
-    <thead class="table-dark">
-    <tr>
-      <th>社員ID</th>
-      <th>社員名</th>
-      <th>電話番号</th>
-      <th>部署</th>
-      <th>権限</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="user : ${list}">
-      <td th:text="${user.user_id}"></td>
-      <td th:text="${user.user_name}"></td>
-      <td th:text="${user.phone_number}"></td>
-      <td th:text="${user.department}"></td>
-      <td th:text="${user.authority}"></td>
-    </tr>
-    </tbody>
-  </table>
-  <div th:if="${navi.totalPageCount > 1}" class="pagination-container d-flex justify-content-center">
-    <ul class="pagination">
-      <li th:classappend="${navi.currentPage == 1} ? 'disabled'">
-        <a type="button" class="btn btn-secondary" id="but1" th:href="@{${#httpServletRequest.requestURI}(page=1, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}"> << </a>
-      </li>
-      <li th:classappend="${navi.currentPage == 1} ? 'disabled'">
-        <a type="button" class="btn btn-secondary" id="but2" th:href="@{${#httpServletRequest.requestURI}(page=${navi.currentPage - 1}, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}"> < </a>
-      </li>
-      <li th:each="i : ${#numbers.sequence(navi.startPageGroup, navi.endPageGroup)}" th:classappend="${navi.currentPage == i} ? 'active'">
-        <a type="button" class="btn btn-secondary" id="but3" th:href="@{${#httpServletRequest.requestURI}(page=${i}, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}" th:text="${i}"></a>
-      </li>
-      <li th:classappend="${navi.currentPage == navi.totalPageCount} ? 'disabled'">
-        <a type="button" class="btn btn-secondary" id="but4" th:href="@{${#httpServletRequest.requestURI}(page=${navi.currentPage + 1}, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}"> > </a>
-      </li>
-      <li th:classappend="${navi.currentPage == navi.totalPageCount} ? 'disabled'">
-        <a type="button" class="btn btn-secondary" id="but5" th:href="@{${#httpServletRequest.requestURI}(page=${navi.totalPageCount}, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}"> >> </a>
-      </li>
-    </ul>
+<div th:insert="~{sidebar :: sidebar}"></div>
+<div class="content">
+  <div class="container mt-5">
+    <h2 class="text-center">ユーザーリスト</h2>
+    <div class="text-end mb-3">
+      <button class="btn btn-primary" id="registerButton">登録</button>
+    </div>
+    <table class="table table-bordered table-hover mt-3" id="userTable">
+      <thead class="table-dark">
+      <tr>
+        <th>社員ID</th>
+        <th>社員名</th>
+        <th>電話番号</th>
+        <th>部署</th>
+        <th>権限</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="user : ${list}">
+        <td th:text="${user.user_id}"></td>
+        <td th:text="${user.user_name}"></td>
+        <td th:text="${user.phone_number}"></td>
+        <td th:text="${user.department}"></td>
+        <td th:text="${user.authority}"></td>
+      </tr>
+      </tbody>
+    </table>
+    <div th:if="${navi.totalPageCount > 1}" class="pagination-container d-flex justify-content-center">
+      <ul class="pagination">
+        <li th:classappend="${navi.currentPage == 1} ? 'disabled'">
+          <a class="btn btn-secondary" th:href="@{${#httpServletRequest.requestURI}(page=1, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}"> << </a>
+        </li>
+        <li th:classappend="${navi.currentPage == 1} ? 'disabled'">
+          <a class="btn btn-secondary" th:href="@{${#httpServletRequest.requestURI}(page=${navi.currentPage - 1}, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}"> < </a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(navi.startPageGroup, navi.endPageGroup)}" th:classappend="${navi.currentPage == i} ? 'active'">
+          <a class="btn btn-secondary" th:href="@{${#httpServletRequest.requestURI}(page=${i}, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}" th:text="${i}"></a>
+        </li>
+        <li th:classappend="${navi.currentPage == navi.totalPageCount} ? 'disabled'">
+          <a class="btn btn-secondary" th:href="@{${#httpServletRequest.requestURI}(page=${navi.currentPage + 1}, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}"> > </a>
+        </li>
+        <li th:classappend="${navi.currentPage == navi.totalPageCount} ? 'disabled'">
+          <a class="btn btn-secondary" th:href="@{${#httpServletRequest.requestURI}(page=${navi.totalPageCount}, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}"> >> </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div id="registrationForm" style="display:none;">
+    <h3>登録フォーム</h3>
+    <form id="form">
+      <div>
+        <label for="user_id">社員ID</label>
+        <input type="text" id="user_id" name="user_id" required>
+      </div>
+      <div>
+        <label for="user_name">社員名</label>
+        <input type="text" id="user_name" name="user_name" required>
+      </div>
+      <div>
+        <label for="phone_number">電話番号</label>
+        <input type="text" id="phone_number" name="phone_number" required>
+      </div>
+      <div>
+        <label for="department">部署</label>
+        <input type="text" id="department" name="department" required>
+      </div>
+      <div>
+        <label for="authority">権限</label>
+        <input type="text" id="authority" name="authority" required>
+      </div>
+      <button type="submit" class="btn btn-success">登録する</button>
+      <button type="button" class="btn btn-secondary" id="cancelButton">キャンセル</button>
+    </form>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/js/header.js"></script>
+<script src="/js/user_list.js"></script>
 </body>
 </html>
