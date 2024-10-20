@@ -1,0 +1,138 @@
+/* layout.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    display: flex;
+}
+
+/* 사이드바 스타일 */
+#sidebar {
+    width: 80px;
+    height: 100vh;
+    background-color: #f0f4f8;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    transition: width 0.3s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2; /* 상위 레이어 */
+    text-align: center; /* 기본 중앙 정렬 */
+}
+
+#sidebar.expanded {
+    width: 200px;
+    align-items: flex-start; /* 확장 시 왼쪽 정렬 */
+}
+
+#sidebar .logo {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+#sidebar .hamburger {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    width: 100%; /* 카드 폭 맞추기 */
+}
+
+#sidebar .nav {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+#sidebar .nav-item {
+    width: 100%;
+}
+
+#sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 축소 시 중앙 정렬 */
+    padding: 15px; /* 패딩 증가 */
+    transition: background-color 0.3s;
+    font-size: 18px; /* 폰트 사이즈 증가 */
+    color: black;
+    text-align: center;
+}
+
+#sidebar.expanded .nav-link {
+    justify-content: flex-start; /* 확장 시 왼쪽 정렬 */
+    padding-left: 20px; /* 확장 시 왼쪽 패딩 추가 */
+}
+
+#sidebar .nav-link i {
+    font-size: 24px; /* 아이콘 사이즈 증가 */
+}
+
+#sidebar.expanded .nav-link i {
+    margin-right: 10px; /* 확장 시 아이콘과 텍스트 간격 조정 */
+}
+
+#sidebar .nav-link:hover {
+    background-color: #e1e4ea; /* 배경색 변경 */
+    border-radius: 8px;
+}
+
+#sidebar .nav-text {
+    display: none;
+    margin-left: 10px;
+}
+
+#sidebar.expanded .nav-text {
+    display: block;
+}
+
+/* 헤더 스타일 */
+header {
+    width: calc(100% - 100px); /* 사이드바 기본 크기와 양 끝 여백 */
+    height: 60px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 10px; /* 상단 여백 추가 */
+    left: 90px; /* 사이드바 기본 너비와 블록 여백 */
+    border-radius: 15px; /* 테두리 반경 추가 */
+    transition: width 0.3s, left 0.3s;
+    z-index: 1; /* 사이드바 밑에 위치 */
+}
+
+header.expanded {
+    width: calc(100% - 220px); /* 사이드바 확장시 너비와 여백 */
+    left: 210px;
+}
+
+/* 콘텐츠 스타일 */
+main.content {
+    margin-left: 80px;
+    padding: 20px;
+    width: calc(100% - 80px);
+    transition: width 0.3s, margin-left 0.3s;
+    margin-top: 80px; /* 콘텐츠 상단 여백 추가, 푸터와의 간격을 위해 */
+    min-height: calc(100vh - 100px); /* 콘텐츠 최소 높이 설정 */
+    background-color: #f0f4f8; /* 콘텐츠 배경색 설정 */
+}
+
+main.content.collapsed {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+}

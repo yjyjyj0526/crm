@@ -1,103 +1,85 @@
-body {
-    color: #212529;
+/* 기본 스타일 초기화 */
+* {
     margin: 0;
     padding: 0;
-    height: 100vh;
+    box-sizing: border-box;
+}
+
+body {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 200px; /* 사이드바의 너비를 설정합니다 */
+    flex-shrink: 0; /* 사이드바가 축소되지 않도록 합니다 */
+    height: 100vh; /* 전체 화면 높이 */
+    overflow: auto; /* 사이드바에 스크롤바 추가 */
+}
+
+.header {
+    width: calc(100% - 200px); /* 사이드바 너비를 제외한 전체 너비 */
+    height: 70px; /* 헤더의 높이를 설정합니다 */
+    position: fixed; /* 페이지 맨 위에 고정합니다 */
+    top: 0;
+    left: 200px; /* 사이드바 너비와 맞춥니다 */
+    z-index: 10; /* 다른 요소들 위에 배치합니다 */
 }
 
 .content {
-    width: 80%;
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
+    flex-grow: 1; /* 가능한 모든 공간을 차지 */
+    margin-top: 70px; /* 헤더 높이만큼 위에서 떨어뜨립니다 */
+    overflow: hidden; /* 불필요한 스크롤바 방지 */
 }
 
-.table-container {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.content-wrapper {
+    height: calc(100vh - 70px); /* 헤더 높이를 제외한 전체 높이 */
+    overflow: auto; /* 필요 시 스크롤바 나타남 */
+    transition: padding-right 0.3s ease-in-out; /* 애니메이션 */
 }
 
-.table {
-    background-color: #ffffff;
+/* 테이블 행 높이를 늘리기 위한 스타일 */
+table {
+    width: 100%;
+    table-layout: fixed; /* 모든 셀이 동일한 너비를 가짐 */
 }
 
-.table-dark {
-    background-color: #343a40;
-    color: white;
+thead th {
+    padding: 30px 10px; /* 패딩 추가 */
+    text-align: center; /* 텍스트 가운데 정렬 */
 }
 
-.table th, .table td {
-    vertical-align: middle;
-    font-size: 18px; /* 텍스트 크기 키움 */
-}
-
-.pagination-container {
-    margin-top: 20px;
+tbody td {
+    padding: 30px 10px; /* 패딩 추가 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    height: 70px; /* 높이 설정 */
 }
 
 /* 등록 폼 스타일 */
-.register-form {
-    display: none;
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 400px;
-    height: 100%;
-    background-color: #ffffff;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    transition: right 0.3s ease;
-}
-
-.register-form.open {
+.registration-container {
+    position: fixed; /* fixed로 변경하여 항상 화면 오른쪽에 위치 */
+    top: 70px; /* 헤더 영역 확보 */
     right: 0;
+    height: calc(100vh - 70px); /* 헤더 높이를 뺀 값 */
+    width: 0;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: width 0.3s ease-in-out;
+    z-index: 5;
 }
 
-.content.shrink {
-    margin-left: -400px; /* 폼 나올 때 왼쪽으로 밀리는 효과 */
-    transition: margin-left 0.3s ease;
+.registration-container.visible {
+    width: 300px; /* 폼 보이기 */
 }
 
-body {
-    color: #212529;
-    margin: 0;
-    padding: 0;
+.registration-form {
+    padding: 20px;
+    width: 300px;
 }
 
-.table {
-    background-color: #ffffff;
-    width: 90%; /* 테이블 너비 증가 */
-    margin: auto; /* 테이블 중앙 정렬 */
-}
-
-.table-dark {
-    background-color: #343a40;
-    color: white;
-}
-
-.table th, .table td {
-    vertical-align: middle;
-}
-
-.pagination-container {
-    margin-top: 20px;
-}
-
-#registrationForm {
-    width: 300px; /* 등록폼 너비 */
-    position: absolute;
-    right: 20px; /* 오른쪽 위치 */
-    top: 100px; /* 위에서의 위치 */
-    background-color: white; /* 배경색 */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 */
-    padding: 20px; /* 패딩 */
-}
-
-.shrink {
-    width: calc(90% - 300px); /* 등록 폼의 너비에 따라 조정 */
+/* main 콘텐츠 축소 스타일 */
+.content.shrink .content-wrapper {
+    padding-right: 300px; /* 등록 폼이 보일 때 콘텐츠 영역 축소 */
 }

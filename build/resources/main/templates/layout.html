@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM 대시보드</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/css/header.css" rel="stylesheet">
+    <link href="/css/layout.css" rel="stylesheet"> <!-- 기본 CSS 유지 -->
+</head>
+<body class="body-small">
+<!-- 사이드바 -->
+<sidebar th:fragment="sidebar">
+    <div id="sidebar" class="small">
+        <div class="hamburger" id="hamburgerBtn">
+            <i class="bi bi-list"></i> <!-- 햄버거 아이콘 -->
+        </div>
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">
+                    <i class="bi bi-house-door-fill"></i>
+                    <span class="nav-text">대시보드</span> <!-- 메뉴 텍스트 -->
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/list">
+                    <i class="bi bi-person-badge"></i>
+                    <span class="nav-text">직원</span>
+                </a>
+            </li>
+            <!-- 기타 메뉴 항목들 -->
+        </ul>
+    </div>
+</sidebar>
+
+<!-- 헤더 -->
+<header th:fragment="header">
+    <div class="logo">
+        <h2>顧客管理システム</h2>
+    </div>
+    <div class="search-bar">
+        <input type="text" placeholder="Search Here">
+        <button type="button" class="btn btn-light">Search</button>
+        <div class="separator"></div> <!-- 구분선 추가 -->
+        <div class="user-profile">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<!-- 메인 콘텐츠 영역 -->
+<main class="content" th:fragment="content">
+    <!-- 여기에 각 페이지의 콘텐츠가 포함됩니다. -->
+</main>
+
+<script src="/js/layout.js"></script>
+</body>
+</html>
