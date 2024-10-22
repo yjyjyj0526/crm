@@ -1,5 +1,6 @@
 /* 기본 스타일 초기화 */
 * {
+    font-family: "Noto Sans JP", sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -39,10 +40,25 @@ body {
     transition: padding-right 0.3s ease-in-out; /* 애니메이션 */
 }
 
+/* d-flex justify-content-between mb-3의 영향을 줄이는 커스텀 스타일 */
+.search-and-register {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px; /* 테이블과의 간격 조정 */
+}
+
+.search-and-register > *, /* 자식 요소들 */
+#searchForm,
+#registerButton {
+    margin-bottom: 0 !important; /* 테이블과의 간격 최소화 강제 */
+}
+
 /* 테이블 행 높이를 늘리기 위한 스타일 */
 table {
     width: 100%;
     table-layout: fixed; /* 모든 셀이 동일한 너비를 가짐 */
+    margin-bottom: 20px; /* 검색폼 및 버튼과의 간격 조정 */
 }
 
 thead th {
@@ -53,6 +69,7 @@ thead th {
 tbody td {
     padding: 30px 10px; /* 패딩 추가 */
     text-align: center; /* 텍스트 가운데 정렬 */
+    vertical-align: middle; /* 수직 가운데 정렬 */
     height: 70px; /* 높이 설정 */
 }
 
@@ -63,23 +80,49 @@ tbody td {
     right: 0;
     height: calc(100vh - 70px); /* 헤더 높이를 뺀 값 */
     width: 0;
-    background-color: #fff;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    background-color: #f0f4f8;
+    box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.1), -10px 0 10px -5px rgba(0, 0, 0, 0.04);
     overflow: hidden;
     transition: width 0.3s ease-in-out;
     z-index: 5;
 }
 
 .registration-container.visible {
-    width: 300px; /* 폼 보이기 */
+    width: 450px; /* 폼 보이기 */
 }
 
 .registration-form {
     padding: 20px;
-    width: 300px;
+    width: 450px;
 }
 
 /* main 콘텐츠 축소 스타일 */
 .content.shrink .content-wrapper {
-    padding-right: 300px; /* 등록 폼이 보일 때 콘텐츠 영역 축소 */
+    padding-right: 450px; /* 등록 폼이 보일 때 콘텐츠 영역 축소 */
+}
+
+/* 페이지네이션 스타일 추가 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px; /* 간격 조정 */
+    gap: 5px; /* 버튼 간격 추가 */
+}
+
+.page-item {
+    list-style: none;
+}
+
+.page-link {
+    padding: 10px 15px;
+    color: #007bff;
+    text-decoration: none;
+    border: 1px solid #dee2e6;
+    border-radius: 3px;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
 }

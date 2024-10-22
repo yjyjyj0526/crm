@@ -60,10 +60,15 @@
         SELECT *
         FROM UserList
         WHERE authority IN (1,2) AND enabled = 1
-        <if test="categorySelect == null or categorySelect == ''">
-            <if test="searchText != null and searchText != ''">
-                AND (user_id LIKE CONCAT('%', #{searchText}, '%') OR user_name LIKE CONCAT('%', #{searchText}, '%'))
-            </if>
+        <if test="categorySelect != null and categorySelect != ''">
+            <choose>
+                <when test="categorySelect == 'user_id'">
+                    AND user_id LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+                <when test="categorySelect == 'user_name'">
+                    AND user_name LIKE CONCAT('%', #{searchText}, '%')
+                </when>
+            </choose>
         </if>
         ORDER BY
         <choose>

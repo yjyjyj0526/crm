@@ -101,8 +101,13 @@ document.addEventListener("DOMContentLoaded", () => {
     loadData();
 
     registerButton.addEventListener("click", () => {
-        registrationContainer.classList.add("visible");
-        content.classList.add("shrink");
+        if (registrationContainer.classList.contains("visible")) {
+            registrationContainer.classList.remove("visible");
+            content.classList.remove("shrink");
+        } else {
+            registrationContainer.classList.add("visible");
+            content.classList.add("shrink");
+        }
     });
 
     cancelButton.addEventListener("click", () => {
