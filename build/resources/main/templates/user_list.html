@@ -59,46 +59,13 @@
         </tr>
         </thead>
         <tbody id="userTableBody">
-        <tr th:each="user : ${list}">
-          <td class="align-middle" th:text="${user.user_id}"></td>
-          <td class="align-middle" th:text="${user.user_name}"></td>
-          <td class="align-middle" th:text="${user.phone_number}"></td>
-          <td class="align-middle" th:text="${user.department}"></td>
-          <td class="align-middle" th:text="${user.authority}"></td>
-          <td class="align-middle text-center">
-            <button class="btn btn-info btn-sm me-2 detailButton" th:data-id="${user.user_id}">상세</button>
-            <button class="btn btn-warning btn-sm editButton" th:data-id="${user.user_id}">수정</button>
-          </td>
-        </tr>
-        <!-- 빈 줄 추가 -->
-        <tr th:if="${list.size()} < 10" th:each="i : ${#numbers.sequence(1, 10 - list.size())}">
-          <td class="align-middle">&nbsp;</td>
-          <td class="align-middle">&nbsp;</td>
-          <td class="align-middle">&nbsp;</td>
-          <td class="align-middle">&nbsp;</td>
-          <td class="align-middle">&nbsp;</td>
-          <td class="align-middle">&nbsp;</td>
-        </tr>
+        <!-- 데이터 표시를 위한 몸체 -->
         </tbody>
       </table>
     </div>
-    <div th:if="${navi.totalPageCount > 1}" id="paginationContainer" class="pagination-container d-flex justify-content-center">
+    <div id="paginationContainer" class="pagination-container d-flex justify-content-center">
       <ul class="pagination">
-        <li th:classappend="${navi.currentPage == 1} ? 'disabled'">
-          <a class="btn btn-secondary" th:href="@{${#httpServletRequest.requestURI}(page=1, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}"> << </a>
-        </li>
-        <li th:classappend="${navi.currentPage == 1} ? 'disabled'">
-          <a class="btn btn-secondary" th:href="@{${#httpServletRequest.requestURI}(page=${navi.currentPage - 1}, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}"> < </a>
-        </li>
-        <li th:each="i : ${#numbers.sequence(navi.startPageGroup, navi.endPageGroup)}" th:classappend="${navi.currentPage == i} ? 'active'">
-          <a class="btn btn-secondary" th:href="@{${#httpServletRequest.requestURI}(page=${i}, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}" th:text="${i}"></a>
-        </li>
-        <li th:classappend="${navi.currentPage == navi.totalPageCount} ? 'disabled'">
-          <a class="btn btn-secondary" th:href="@{${#httpServletRequest.requestURI}(page=${navi.currentPage + 1}, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}"> > </a>
-        </li>
-        <li th:classappend="${navi.currentPage == navi.totalPageCount} ? 'disabled'">
-          <a class="btn btn-secondary" th:href="@{${#httpServletRequest.requestURI}(page=${navi.totalPageCount}, categorySelect=${categorySelect}, searchText=${searchText}, order=${order}, orderDirection=${orderDirection}, countPerPage=${countPerPage})}"> >> </a>
-        </li>
+        <!-- 페이지네이션 버튼들 -->
       </ul>
     </div>
   </div>

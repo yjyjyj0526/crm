@@ -59,9 +59,9 @@ public class UserServiceImpl implements UserService{
         map.put("orderDirection", orderDirection);
 
         RowBounds rb = new RowBounds(pagenation.getStartRecord(), pagenation.getCountPerPage());
-        ArrayList<UserList> list = dao.userList(map, rb);
-        return list;
+        return dao.userList(map, rb);
     }
+
     @Override
     public PagenationUtil getPageNavigator(int pagePerGroup, int countPerPage, int page, String categorySelect, String searchText) {
         HashMap<String, String> map = new HashMap<>();
@@ -69,10 +69,7 @@ public class UserServiceImpl implements UserService{
         map.put("searchText", searchText);
 
         int total = dao.getTotal(map);
-
-        PagenationUtil navi = new PagenationUtil(pagePerGroup, countPerPage, page, total);
-
-        return navi;
+        return new PagenationUtil(pagePerGroup, countPerPage, page, total);
     }
     @Override
     public UserList userDetails(String user_id) {

@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const editCancelButton = document.getElementById("editCancelButton");
     const loadingSpinner = document.getElementById("loadingSpinner");
     const userTable = document.getElementById("userTable");
+    const searchForm = document.getElementById("searchForm");
 
-    // 폼 보이기 및 숨기기 로직
     registerButton.addEventListener("click", () => {
         hideAllForms();
         showForm(registrationContainer);
@@ -28,45 +28,47 @@ document.addEventListener("DOMContentLoaded", () => {
         hideForm(editContainer);
     });
 
+    // 검색 폼 제출 이벤트 설정
+    searchForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        loadData(1); // 검색 시 첫 페이지부터 시작
+    });
+
     // 이벤트 위임을 사용하여 상세 버튼 및 수정 버튼 클릭 이벤트 처리
     document.addEventListener("click", (event) => {
         if (event.target.classList.contains("detailButton")) {
-            const userId = event.target.getAttribute("data-id");
-            fetchUserDetails(userId);
+            const user_id = event.target.getAttribute("data-id");
+            fetchUserDetails(user_id);
         } else if (event.target.classList.contains("editButton")) {
-            const userId = event.target.getAttribute("data-id");
-            fetchUserEditForm(userId);
+            const user_id = event.target.getAttribute("data-id");
+            fetchUserEditForm(user_id);
         }
     });
 
-    // 폼 보이기
     function showForm(container) {
         container.classList.add("visible");
         content.classList.add("shrink");
     }
 
-    // 폼 숨기기
     function hideForm(container) {
         container.classList.remove("visible");
         content.classList.remove("shrink");
     }
 
-    // 모든 폼 숨기기
     function hideAllForms() {
         hideForm(registrationContainer);
         hideForm(detailContainer);
         hideForm(editContainer);
     }
 
-    // 사용자 상세 정보 요청
-    function fetchUserDetails(userId) {
-        fetch(`/user/details/${userId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+    function fetchUserDetails(user_id) {
+        if (!user_id) {
+            console.error('User ID is missing');
+            return;
+        }
+
+        fetch(`/user/details/${user_id}`)
+            .then(response => response.json())
             .then(data => {
                 fillDetailForm(data);
                 hideAllForms();
@@ -75,15 +77,14 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error fetching user details:', error));
     }
 
-    // 사용자 수정 폼 요청
-    function fetchUserEditForm(userId) {
-        fetch(`/user/edit/${userId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+    function fetchUserEditForm(user_id) {
+        if (!user_id) {
+            console.error('User ID is missing');
+            return;
+        }
+
+        fetch(`/user/edit/${user_id}`)
+            .then(response => response.json())
             .then(data => {
                 fillEditForm(data);
                 hideAllForms();
@@ -92,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error fetching user edit form:', error));
     }
 
-    // 상세 정보 폼 채우기
     function fillDetailForm(data) {
         document.getElementById("detail_user_id").value = data.user_id;
         document.getElementById("detail_user_name").value = data.user_name;
@@ -101,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("detail_authority").value = data.authority;
     }
 
-    // 수정 폼 채우기
     function fillEditForm(data) {
         document.getElementById("edit_user_id").value = data.user_id;
         document.getElementById("edit_user_name").value = data.user_name;
@@ -110,47 +109,49 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("edit_authority").value = data.authority;
     }
 
-    // 사용자 리스트 및 페이지네이션 업데이트
     function loadData(page = 1) {
         if (!loadingSpinner || !userTable) {
             console.error("Loading spinner or user table element not found");
             return;
         }
 
-        // 로딩 스피너 표시 및 테이블 숨기기
         loadingSpinner.style.display = 'block';
         userTable.style.display = 'none';
 
         const categorySelect = document.getElementById('categorySelect').value;
-        const searchText = document.getElementById('searchText').value;
-        const url = `/user/list/json?page=${page}&categorySelect=${categorySelect}&searchText=${searchText}&order=&orderDirection=ASC&countPerPage=10`;
+        const searchTextElement = document.getElementById('searchText');
+        const searchText = searchTextElement ? searchTextElement.value.trim() : ""; // 검색어가 없는 경우 빈 문자열로 설정
+
+        const url = `/user/list/json?page=${page}&categorySelect=${categorySelect}&searchText=${encodeURIComponent(searchText)}&order=&orderDirection=ASC&countPerPage=10`;
 
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                console.log('Data fetched:', data);
-                updateTable(data.list);
-                updatePagination(data.navi);
-
-                // 로딩 스피너 숨기기 및 테이블 표시
+                console.log("data received", data); // 이 부분에 로그를 추가하여 데이터 확인
+                if (data.list) {
+                    updateTable(data.list);
+                } else {
+                    console.warn("User list is missing");
+                }
+                if (data.navi) {
+                    updatePagination(data.navi);
+                } else {
+                    console.warn("Pagination data is missing");
+                }
                 loadingSpinner.style.display = 'none';
                 userTable.style.display = 'table';
             })
             .catch(error => {
                 console.error('Error fetching or parsing data:', error);
-                // 에러 발생 시 로딩 스피너 숨기기
                 loadingSpinner.style.display = 'none';
-                // 필요한 경우 에러 메시지 표시
             });
     }
 
-    // 사용자 테이블 업데이트
     function updateTable(users) {
         const tableBody = document.getElementById('userTableBody');
         tableBody.innerHTML = '';
 
         if (users.length === 0) {
-            // 유저 리스트가 비어있는 경우 처리
             const emptyRow = document.createElement('tr');
             emptyRow.innerHTML = `<td colspan="6">No users found.</td>`;
             tableBody.appendChild(emptyRow);
@@ -158,67 +159,114 @@ document.addEventListener("DOMContentLoaded", () => {
             users.forEach(user => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${user.user_id}</td>
-                    <td>${user.user_name}</td>
-                    <td>${user.phone_number}</td>
-                    <td>${user.department}</td>
-                    <td>${user.authority}</td>
-                    <td class="align-middle text-center">
-                        <button class="btn btn-info btn-sm me-2 detailButton" data-id="${user.user_id}">상세</button>
-                        <button class="btn btn-warning btn-sm editButton" data-id="${user.user_id}">수정</button>
-                    </td>
-                `;
+          <td>${user.user_id}</td>
+          <td>${user.user_name}</td>
+          <td>${user.phone_number}</td>
+          <td>${user.department}</td>
+          <td>${user.authority}</td>
+          <td>
+            <button class="btn btn-info detailButton" data-id="${user.user_id}">상세</button>
+            <button class="btn btn-warning editButton" data-id="${user.user_id}">수정</button>
+          </td>
+        `;
                 tableBody.appendChild(row);
             });
+
+            const emptyRowsCount = 10 - users.length;
+            for (let i = 0; i < emptyRowsCount; i++) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = `<td colspan="6">&nbsp;</td>`;
+                tableBody.appendChild(emptyRow);
+            }
         }
     }
 
-    // 페이지네이션 업데이트
     function updatePagination(navi) {
-        const paginationContainer = document.getElementById('paginationContainer');
-        if (!paginationContainer) {
-            console.error('Pagination container not found');
-            return;
+        const paginationContainer = document.querySelector('.pagination');
+        paginationContainer.innerHTML = '';
+
+        if (!navi.pages) {
+            // navi.pages가 없을 경우 직접 생성
+            const totalPages = navi.totalPageCount;
+            navi.pages = Array.from({ length: totalPages }, (_, i) => i + 1);
         }
 
-        const paginationList = paginationContainer.querySelector('ul.pagination');
-        if (!paginationList) {
-            console.error('Pagination list not found');
-            return;
-        }
-        paginationList.innerHTML = '';
+        const firstPageItem = document.createElement('li');
+        firstPageItem.classList.add('page-item');
+        const firstPageLink = document.createElement('a');
+        firstPageLink.classList.add('page-link');
+        firstPageLink.href = '#';
+        firstPageLink.textContent = '<<';
+        firstPageLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            loadData(1);
+        });
+        firstPageItem.appendChild(firstPageLink);
+        paginationContainer.appendChild(firstPageItem);
 
-        if (navi.currentPage > 1) {
-            const prev = document.createElement('li');
-            prev.innerHTML = `<a class="btn btn-secondary" href="#" data-page="${navi.currentPage - 1}"> < </a>`;
-            paginationList.appendChild(prev);
-            prev.querySelector('a').addEventListener('click', (e) => {
-                e.preventDefault();
+        const prevPageItem = document.createElement('li');
+        prevPageItem.classList.add('page-item');
+        const prevPageLink = document.createElement('a');
+        prevPageLink.classList.add('page-link');
+        prevPageLink.href = '#';
+        prevPageLink.textContent = '<';
+        prevPageLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            if (navi.currentPage > 1) {
                 loadData(navi.currentPage - 1);
-            });
-        }
+            }
+        });
+        prevPageItem.appendChild(prevPageLink);
+        paginationContainer.appendChild(prevPageItem);
 
-        for (let i = navi.startPageGroup; i <= navi.endPageGroup; i++) {
+        navi.pages.forEach(page => {
             const pageItem = document.createElement('li');
-            pageItem.innerHTML = `<a class="btn btn-secondary ${i === navi.currentPage ? 'active' : ''}" href="#" data-page="${i}">${i}</a>`;
-            paginationList.appendChild(pageItem);
-            pageItem.querySelector('a').addEventListener('click', (e) => {
-                e.preventDefault();
-                loadData(i);
-            });
-        }
+            pageItem.classList.add('page-item');
+            if (page === navi.currentPage) {
+                pageItem.classList.add('active');
+            }
 
-        if (navi.currentPage < navi.totalPageCount) {
-            const next = document.createElement('li');
-            next.innerHTML = `<a class="btn btn-secondary" href="#" data-page="${navi.currentPage + 1}"> > </a>`;
-            paginationList.appendChild(next);
-            next.querySelector('a').addEventListener('click', (e) => {
-                e.preventDefault();
-                loadData(navi.currentPage + 1);
+            const pageLink = document.createElement('a');
+            pageLink.classList.add('page-link');
+            pageLink.href = '#';
+            pageLink.textContent = page;
+            pageLink.addEventListener('click', (event) => {
+                event.preventDefault();
+                loadData(page);
             });
-        }
+
+            pageItem.appendChild(pageLink);
+            paginationContainer.appendChild(pageItem);
+        });
+
+        const nextPageItem = document.createElement('li');
+        nextPageItem.classList.add('page-item');
+        const nextPageLink = document.createElement('a');
+        nextPageLink.classList.add('page-link');
+        nextPageLink.href = '#';
+        nextPageLink.textContent = '>';
+        nextPageLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            if (navi.currentPage < navi.totalPageCount) {
+                loadData(navi.currentPage + 1);
+            }
+        });
+        nextPageItem.appendChild(nextPageLink);
+        paginationContainer.appendChild(nextPageItem);
+
+        const lastPageItem = document.createElement('li');
+        lastPageItem.classList.add('page-item');
+        const lastPageLink = document.createElement('a');
+        lastPageLink.classList.add('page-link');
+        lastPageLink.href = '#';
+        lastPageLink.textContent = '>>';
+        lastPageLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            loadData(navi.totalPageCount);
+        });
+        lastPageItem.appendChild(lastPageLink);
+        paginationContainer.appendChild(lastPageItem);
     }
 
-    // 초기 데이터 로딩
     loadData();
 });

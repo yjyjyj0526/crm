@@ -63,12 +63,17 @@
         <if test="categorySelect != null and categorySelect != ''">
             <choose>
                 <when test="categorySelect == 'user_id'">
-                    AND user_id LIKE CONCAT('%', #{searchText}, '%')
+                    AND user_id LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
                 </when>
                 <when test="categorySelect == 'user_name'">
-                    AND user_name LIKE CONCAT('%', #{searchText}, '%')
+                    AND user_name LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
                 </when>
             </choose>
+        </if>
+        <if test="categorySelect == null or categorySelect == ''">
+            <if test="searchText != null and searchText != ''">
+                AND (user_id LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%') OR user_name LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%'))
+            </if>
         </if>
         ORDER BY
         <choose>
@@ -89,16 +94,16 @@
         <if test="categorySelect != null and categorySelect != ''">
             <choose>
                 <when test="categorySelect == 'user_id'">
-                    AND user_id LIKE CONCAT('%', #{searchText}, '%')
+                    AND user_id LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
                 </when>
                 <when test="categorySelect == 'user_name'">
-                    AND user_name LIKE CONCAT('%', #{searchText}, '%')
+                    AND user_name LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
                 </when>
             </choose>
         </if>
         <if test="categorySelect == null or categorySelect == ''">
             <if test="searchText != null and searchText != ''">
-                AND (user_id LIKE CONCAT('%', #{searchText}, '%') OR user_name LIKE CONCAT('%', #{searchText}, '%'))
+                AND (user_id LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%') OR user_name LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%'))
             </if>
         </if>
     </select>

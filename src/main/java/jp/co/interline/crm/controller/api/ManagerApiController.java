@@ -1,4 +1,4 @@
-package jp.co.interline.crm.controller;
+package jp.co.interline.crm.controller.api;
 
 import jp.co.interline.crm.domain.ClientManager;
 import jp.co.interline.crm.service.ManagerService;
@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @Controller
-public class ManagerController {
+public class ManagerApiController {
     @Autowired
     ManagerService service;
     //顧客登録

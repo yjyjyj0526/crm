@@ -1,4 +1,4 @@
-package jp.co.interline.crm.controller;
+package jp.co.interline.crm.controller.api;
 
 import jp.co.interline.crm.domain.UserList;
 import jp.co.interline.crm.service.UserService;
@@ -17,26 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class UserController {
+public class UserApiController {
 
     @Autowired
     UserService service;
-
-    //로그인폼 이동
-    @GetMapping("/loginform")
-    public String loginForm(@RequestParam(value = "error", required = false) String error,
-                            @RequestParam(value = "exception", required = false) String exception,
-                            Model model){
-        model.addAttribute("error", error);
-        model.addAttribute("exception", exception);
-        return "login_form";
-    }
-
-    //회원가입폼 이동
-    @GetMapping("/user/joinform")
-    public String joinForm(){
-        return "join_form";
-    }
 
     //회원가입
     @PostMapping("/user/join")
@@ -107,32 +91,6 @@ public class UserController {
         return ResponseEntity.ok("ユーザー修正成功");
     }
 
-    //社員リスト
-    @GetMapping("/user/list")
-    public String userListForManager(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(name = "categorySelect", required = false) String categorySelect,
-            @RequestParam(name = "searchText", required = false) String searchText,
-            @RequestParam(name = "order", required = false) String order,
-            @RequestParam(name = "orderDirection", required = false, defaultValue = "ASC") String orderDirection,
-            @RequestParam(name = "countPerPage", required = false, defaultValue = "10") int countPerPage,
-            Model model) {
-        int pagePerGroup = 5;
-
-        PagenationUtil navi = service.getPageNavigator(pagePerGroup, countPerPage, page, categorySelect, searchText);
-        ArrayList<UserList> list = service.userList(navi, categorySelect, searchText, order, orderDirection);
-
-        model.addAttribute("navi", navi);
-        model.addAttribute("list", list);
-        model.addAttribute("order", order);
-        model.addAttribute("orderDirection", orderDirection);
-        model.addAttribute("categorySelect", categorySelect);
-        model.addAttribute("searchText", searchText);
-        model.addAttribute("countPerPage", countPerPage);
-
-        return "user_list";
-    }
-
     @GetMapping("/user/list/json")
     public ResponseEntity<Map<String, Object>> getUserListJson(
             @RequestParam(defaultValue = "1") int page,
@@ -143,6 +101,10 @@ public class UserController {
             @RequestParam(name = "countPerPage", required = false, defaultValue = "10") int countPerPage) {
 
         int pagePerGroup = 5;
+
+        if (searchText == null || searchText.isEmpty()) {
+            searchText = null; // 검색어가 없으면 검색 조건을 null로 설정
+        }
 
         PagenationUtil navi = service.getPageNavigator(pagePerGroup, countPerPage, page, categorySelect, searchText);
         ArrayList<UserList> list = service.userList(navi, categorySelect, searchText, order, orderDirection);

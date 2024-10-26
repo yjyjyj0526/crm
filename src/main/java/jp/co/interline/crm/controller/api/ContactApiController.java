@@ -1,4 +1,4 @@
-package jp.co.interline.crm.controller;
+package jp.co.interline.crm.controller.api;
 
 import jp.co.interline.crm.domain.ContactHistory;
 import jp.co.interline.crm.service.ContactService;
@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @Controller
-public class ContactController {
+public class ContactApiController {
     @Autowired
     ContactService service;
     //컨텍트 날짜 -> 날짜 형식 변경 추가 할 것
