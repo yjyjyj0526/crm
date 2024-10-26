@@ -2,14 +2,21 @@ package jp.co.interline.crm.controller.api;
 
 import jp.co.interline.crm.domain.UserList;
 import jp.co.interline.crm.service.UserService;
+import jp.co.interline.crm.util.FileService;
 import jp.co.interline.crm.util.PagenationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,36 +26,75 @@ import java.util.Map;
 @Controller
 public class UserApiController {
 
+    @Value("${spring.servlet.multipart.location}")
+    String uploadPath;
+
     @Autowired
     UserService service;
 
+    //파일 저장
+    private String saveFile(MultipartFile file) {
+        if (file != null && !file.isEmpty()) {
+            return FileService.saveFile(file, uploadPath);
+        }
+        return null;
+    }
+
+    //파일 삭제
+    private void deleteFile(String fileName) {
+        if (fileName != null && !fileName.isEmpty()) {
+            Path filePath = Paths.get(uploadPath, fileName);
+            if (Files.exists(filePath)) {
+                try {
+                    Files.delete(filePath);
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
+
     //회원가입
     @PostMapping("/user/join")
-    public ResponseEntity<?> joinUser(@RequestParam("user_id") String user_id,
-                                      @RequestParam("user_name") String user_name,
-                                      @RequestParam("password") String password,
-                                      @RequestParam(value = "phone_number", required = false) String phone_number,
-                                      @RequestParam(value = "department", required = false) String department,
-                                      @RequestParam("authority") int authority,
-                                      @RequestParam("register_member_id") String register_member_id) {
-        if (service.findUserID(user_id)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("使用できないIDです。");
-        } else {
-            LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
-            String formattedDate = now.format(formatter);
+    public ResponseEntity<Map<String, Object>> joinUser(
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam("user_id") String userId,
+            @RequestParam("user_name") String userName,
+            @RequestParam("password") String password,
+            @RequestParam(value = "phone_number", required = false) String phoneNumber,
+            @RequestParam(value = "department", required = false) String department,
+            @RequestParam("authority") int authority,
+            @RequestParam("register_member_id") String registerMemberId) {
 
-            UserList user = new UserList();
-            user.setUser_id(user_id);
-            user.setUser_name(user_name);
-            user.setPassword(password);
-            user.setPhone_number(phone_number);
-            user.setDepartment(department);
-            user.setAuthority(authority);
-            user.setRegister_member_id(register_member_id);
-            user.setRegistration_date(formattedDate);
-            service.joinUser(user);
-            return ResponseEntity.ok("ユーザー登録成功");
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            if (service.findUserID(userId)) {
+                response.put("message", "사용할 수 없는 ID입니다.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            } else {
+                String solutionPic = (file != null && !file.isEmpty()) ? saveFile(file) : null;
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
+                String formattedDate = now.format(formatter);
+
+                UserList user = new UserList();
+                user.setUser_id(userId);
+                user.setUser_name(userName);
+                user.setPassword(password);
+                user.setPhone_number(phoneNumber);
+                user.setDepartment(department);
+                user.setAuthority(authority);
+                user.setRegister_member_id(registerMemberId);
+                user.setRegistration_date(formattedDate);
+                user.setProfile_image_path(solutionPic);  // 파일 경로 설정
+                service.joinUser(user);
+
+                response.put("message", "ユーザー登録成功");
+                return ResponseEntity.ok(response);
+            }
+        } catch (Exception e) {
+            response.put("message", "ユーザー登録 실패: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 

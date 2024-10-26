@@ -9,7 +9,8 @@ CREATE TABLE UserList (
     register_member_id VARCHAR(30) NOT NULL,
     update_date VARCHAR(20),
     update_member_id VARCHAR(30),
-    enabled INT DEFAULT 1
+    enabled INT DEFAULT 1,
+    profile_image_path VARCHAR(255)
 );
 
 CREATE TABLE ClientCompany (

@@ -16,23 +16,25 @@
 
     <insert id="joinUser" parameterType="jp.co.interline.crm.domain.UserList">
         insert into UserList
-            (user_id,
-            user_name,
-            password,
-            phone_number,
-            department,
-            authority,
-            register_member_id,
-            registration_date)
+        (user_id,
+         user_name,
+         password,
+         phone_number,
+         department,
+         authority,
+         register_member_id,
+         registration_date,
+         profile_image_path)
         values
             (#{user_id},
-            #{user_name},
-            #{password},
-            #{phone_number},
-            #{department},
-            #{authority},
-            #{register_member_id},
-            #{registration_date})
+             #{user_name},
+             #{password},
+             #{phone_number},
+             #{department},
+             #{authority},
+             #{register_member_id},
+             #{registration_date},
+             #{profile_image_path})
     </insert>
 
     <select id="findUserID" resultType="String" parameterType="String">

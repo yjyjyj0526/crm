@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const loadingSpinner = document.getElementById("loadingSpinner");
     const userTable = document.getElementById("userTable");
     const searchForm = document.getElementById("searchForm");
+    const registrationForm = document.getElementById("form");
 
     registerButton.addEventListener("click", () => {
         hideAllForms();
@@ -26,6 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     editCancelButton.addEventListener("click", () => {
         hideForm(editContainer);
+    });
+
+    // 등록 폼 제출 이벤트 설정
+    registrationForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitRegistrationForm(registrationForm);
     });
 
     // 검색 폼 제출 이벤트 설정
@@ -159,16 +166,16 @@ document.addEventListener("DOMContentLoaded", () => {
             users.forEach(user => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-          <td>${user.user_id}</td>
-          <td>${user.user_name}</td>
-          <td>${user.phone_number}</td>
-          <td>${user.department}</td>
-          <td>${user.authority}</td>
-          <td>
-            <button class="btn btn-info detailButton" data-id="${user.user_id}">상세</button>
-            <button class="btn btn-warning editButton" data-id="${user.user_id}">수정</button>
-          </td>
-        `;
+                    <td>${user.user_id}</td>
+                    <td>${user.user_name}</td>
+                    <td>${user.phone_number}</td>
+                    <td>${user.department}</td>
+                    <td>${user.authority}</td>
+                    <td>
+                        <button class="btn btn-info detailButton" data-id="${user.user_id}">상세</button>
+                        <button class="btn btn-warning editButton" data-id="${user.user_id}">수정</button>
+                    </td>
+                `;
                 tableBody.appendChild(row);
             });
 
@@ -266,6 +273,42 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         lastPageItem.appendChild(lastPageLink);
         paginationContainer.appendChild(lastPageItem);
+    }
+
+    function submitRegistrationForm(form) {
+        const formData = new FormData(form);
+
+        // 파일이 선택되지 않은 경우 file 엔트리를 삭제
+        const fileInput = document.getElementById("file");
+        if (fileInput.files.length === 0) {
+            formData.delete("file");
+        }
+
+        // FormData 콘솔 로그로 확인
+        for (const [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+
+        fetch('/user/join', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return response.json().then(json => { throw new Error(json.message) });
+                }
+            })
+            .then(data => {
+                alert(data.message);  // 성공 메시지 표시
+                hideForm(registrationContainer);
+                loadData(); // 다시 로드하여 새로운 데이터를 표시
+            })
+            .catch(error => {
+                console.error('Error submitting registration form:', error);
+                alert(`ユーザー登録 실패: ${error.message}`);
+            });
     }
 
     loadData();
