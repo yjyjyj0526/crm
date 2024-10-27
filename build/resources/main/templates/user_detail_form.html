@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!-- 메타 정보와 스타일시트 링크는 생략 -->
+</head>
+<body>
+<div class="registration-container" id="detailContainer" th:fragment="detailForm">
+    <div class="registration-form">
+        <h3>상세 정보</h3>
+        <form id="detailForm">
+            <div class="form-group text-center">
+                <img id="detail_profile_image" src="/images/default-profile.png" alt="프로필 이미지" style="width: 150px; height: 150px;">
+            </div>
+            <div class="form-group">
+                <label for="detail_user_id">직원 ID</label>
+                <input type="text" id="detail_user_id" name="user_id" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_user_name">직원명</label>
+                <input type="text" id="detail_user_name" name="user_name" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_phone_number">전화번호</label>
+                <input type="text" id="detail_phone_number" name="phone_number" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_department">부서</label>
+                <input type="text" id="detail_department" name="department" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_authority">권한</label>
+                <input type="number" id="detail_authority" name="authority" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-secondary" id="detailCancelButton">닫기</button>
+                <button type="button" class="btn btn-primary" id="detailEditButton" data-id="${user.user_id}">수정</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

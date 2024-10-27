@@ -40,7 +40,6 @@ body {
     transition: padding-right 0.3s ease-in-out; /* 애니메이션 */
 }
 
-/* d-flex justify-content-between mb-3의 영향을 줄이는 커스텀 스타일 */
 .search-and-register {
     display: flex;
     justify-content: space-between;
@@ -48,13 +47,12 @@ body {
     margin-bottom: 10px; /* 테이블과의 간격 조정 */
 }
 
-.search-and-register > *, /* 자식 요소들 */
+.search-and-register > *,
 #searchForm,
 #registerButton {
     margin-bottom: 0 !important; /* 테이블과의 간격 최소화 강제 */
 }
 
-/* 테이블 행 높이를 늘리기 위한 스타일 */
 table {
     width: 100%;
     table-layout: fixed; /* 모든 셀이 동일한 너비를 가짐 */
@@ -73,7 +71,6 @@ tbody td {
     height: 70px; /* 높이 설정 */
 }
 
-/* 등록 폼 스타일 */
 .registration-container {
     position: fixed; /* fixed로 변경하여 항상 화면 오른쪽에 위치 */
     top: 70px; /* 헤더 영역 확보 */
@@ -96,12 +93,10 @@ tbody td {
     width: 450px;
 }
 
-/* main 콘텐츠 축소 스타일 */
 .content.shrink .content-wrapper {
     padding-right: 450px; /* 등록 폼이 보일 때 콘텐츠 영역 축소 */
 }
 
-/* 페이지네이션 스타일 추가 */
 .pagination {
     display: flex;
     justify-content: center;
