@@ -84,9 +84,18 @@
     </div>
   </div>
   <div th:insert="user_registration_form :: registrationForm"></div>
+  <div th:insert="user_registration_form :: registrationSuccessModal"></div>
+  <div th:insert="user_registration_form :: registrationFailModal"></div>
   <div th:insert="user_detail_form :: detailForm"></div>
   <div th:insert="user_edit_form :: editForm"></div>
+  <div th:insert="user_edit_form :: editSuccessModal"></div>
+  <div th:insert="user_edit_form :: editFailModal"></div>
 </main>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  var userId = /*[[${#authentication.name}]]*/;
+  /*]]>*/
+</script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

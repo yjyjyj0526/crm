@@ -7,7 +7,7 @@
 <div class="registration-container" id="registrationContainer" th:fragment="registrationForm">
     <div class="registration-form">
         <h3>등록 폼</h3>
-        <form id="form" enctype="multipart/form-data">
+        <form id="registrationForm" enctype="multipart/form-data">
             <div>
                 <label for="user_id">직원 ID</label>
                 <input type="text" id="user_id" name="user_id" required class="form-control" />
@@ -40,6 +40,42 @@
             <button type="submit" class="btn btn-success mt-3">등록</button>
             <button type="button" class="btn btn-secondary mt-3" id="cancelButton">취소</button>
         </form>
+    </div>
+</div>
+
+<!-- 등록 성공 모달 -->
+<div class="modal fade" id="registrationSuccessModal" tabindex="-1" aria-labelledby="registrationSuccessModalLabel" aria-hidden="true" th:fragment="registrationSuccessModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registrationSuccessModalLabel">등록 성공</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                사용자가 성공적으로 등록되었습니다.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 등록 실패 모달 -->
+<div class="modal fade" id="registrationFailModal" tabindex="-1" aria-labelledby="registrationFailModalLabel" aria-hidden="true" th:fragment="registrationFailModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registrationFailModalLabel">등록 실패</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                사용자 등록 중 오류가 발생했습니다.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
     </div>
 </div>
 

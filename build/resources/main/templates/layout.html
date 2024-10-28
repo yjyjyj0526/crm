@@ -63,14 +63,6 @@
 
 </main>
 
-<!-- 사용자 ID를 자바스크립트 변수로 설정 -->
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var userId =/*[[${#authentication.name}]]*/;
-    /*]]>*/
-</script>
-
-<!-- main.js 파일을 마지막에 포함시킵니다 -->
 <script src="/js/layout.js" defer></script>
 </body>
 </html>

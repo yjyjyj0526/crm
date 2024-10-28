@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.myApp = {};
     }
 
-    // fetchData 함수 정의
     if (!window.myApp.fetchData) {
         window.myApp.fetchData = async function(url) {
             const response = await fetch(url, {
@@ -12,25 +11,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json',
                 },
             });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
             return response.json();
         };
     }
 
-    // postData 함수 정의
     if (!window.myApp.postData) {
         window.myApp.postData = async function(url, data) {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json', // JSON 데이터를 전송하려면 이 헤더가 필요합니다
+                    'Content-Type': 'application/json',
                 },
-                body: data,
+                body: JSON.stringify(data),
             });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
             return response.json();
         };
     }
 
-    // 폼 표시 함수 정의
     if (!window.myApp.showForm) {
         window.myApp.showForm = function(container) {
             requestAnimationFrame(() => {
@@ -40,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // 폼 숨기기 함수 정의
     if (!window.myApp.hideForm) {
         window.myApp.hideForm = function(container) {
             container.classList.remove('visible');
@@ -48,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // 모든 폼 숨기기 함수 정의
     if (!window.myApp.hideAllForms) {
         window.myApp.hideAllForms = function(formContainers) {
             formContainers.forEach(container => window.myApp.hideForm(container));
@@ -132,8 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const registrationForm = document.getElementById('form'); // 변경된 ID 사용
-    console.log('registrationForm:', registrationForm); // 콘솔 로그 추가
+    const registrationForm = document.getElementById('registrationForm');
     if (registrationForm) {
         registrationForm.addEventListener('submit', event => {
             event.preventDefault();
@@ -144,7 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const editForm = document.getElementById('editForm');
-    console.log('editForm:', editForm); // 콘솔 로그 추가
     if (editForm) {
         editForm.addEventListener('submit', event => {
             event.preventDefault();
@@ -183,8 +182,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadData();
 
-    // 데이터 로드 함수 정의
     function loadData(page = 1) {
+        if (!searchForm) {
+            console.error('searchForm not found');
+            return;
+        }
+
         const params = new URLSearchParams(new FormData(searchForm));
         params.append('page', page);
         params.append('order', currentOrder);
@@ -199,9 +202,13 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error loading user list:', error));
     }
 
-    // 테이블 채우기 함수 정의
     function populateTable(users, countPerPage = 10) {
         const userTableBody = document.getElementById('userTableBody');
+        if (!userTableBody) {
+            console.error('userTableBody not found');
+            return;
+        }
+
         userTableBody.innerHTML = '';
 
         users.forEach(user => {
@@ -228,9 +235,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 페이지네이션 설정 함수 정의
     function setupPagination(totalPages, currentPage = 1) {
         const paginationContainer = document.querySelector('.pagination');
+        if (!paginationContainer) {
+            console.error('paginationContainer not found');
+            return;
+        }
+
         paginationContainer.innerHTML = '';
 
         const createPageItem = (page, label, disabled = false) => {
@@ -258,7 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
         paginationContainer.appendChild(createPageItem(totalPages, '>>', currentPage === totalPages));
     }
 
-    // 사용자 상세 정보 가져오기 함수 정의
     function fetchUserDetails(user_id) {
         fetchData(`/user/details/${user_id}`)
             .then(data => {
@@ -273,7 +283,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error fetching user details:', error));
     }
 
-    // 사용자 편집 폼 가져오기 함수 정의
     function fetchUserEditForm(user_id) {
         fetchData(`/user/edit/${user_id}`)
             .then(data => {
@@ -293,7 +302,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error fetching user edit form:', error));
     }
 
-    // 상세 폼 채우기 함수 정의
     function fillDetailForm(data) {
         if (!data || !data.user) {
             console.error('Invalid data provided for filling detail form:', data);
@@ -316,13 +324,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 등록 폼 제출 함수 정의
+    function initializeModal(elementId, modalName) {
+        const element = document.getElementById(elementId);
+        if (!element) {
+            console.error(`${modalName} not found with ID ${elementId}`);
+            return null;
+        }
+        return new bootstrap.Modal(element);
+    }
+
+    const registrationSuccessModal = initializeModal('registrationSuccessModal', 'registrationSuccessModal');
+    const registrationFailModal = initializeModal('registrationFailModal', 'registrationFailModal');
+    const editSuccessModal = initializeModal('editSuccessModal', 'editSuccessModal');
+    const editFailModal = initializeModal('editFailModal', 'editFailModal');
+
+    if (!registrationSuccessModal) console.warn('등록 성공 모달 요소를 찾을 수 없습니다.');
+    if (!registrationFailModal) console.warn('등록 실패 모달 요소를 찾을 수 없습니다.');
+    if (!editSuccessModal) console.warn('수정 성공 모달 요소를 찾을 수 없습니다.');
+    if (!editFailModal) console.warn('수정 실패 모달 요소를 찾을 수 없습니다.');
+
     function submitRegistrationForm(form) {
         const loadingSpinner = document.getElementById('loadingSpinner');
+        if (!loadingSpinner) {
+            console.error('loadingSpinner not found');
+            return;
+        }
 
         const formData = new FormData(form);
 
-        console.log('Submit Registration Form Data:', Array.from(formData.entries())); // 제출할 데이터 로그 출력
+        console.log('Submit Registration Form Data:', Array.from(formData.entries()));
 
         loadingSpinner.style.display = 'block';
 
@@ -336,23 +366,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response && response.success) {
                     hideAllForms(formContainers);
                     loadData();
+                    if (registrationSuccessModal) {
+                        registrationSuccessModal.show();
+                    }
                 } else {
+                    if (registrationFailModal) {
+                        registrationFailModal.show();
+                    }
                     console.error('Error registering user:', response);
                 }
             })
             .catch(error => {
                 loadingSpinner.style.display = 'none';
+                if (registrationFailModal) {
+                    registrationFailModal.show();
+                }
                 console.error('Error submitting registration form:', error);
             });
     }
 
-    // 편집 폼 제출 함수 정의
     function submitEditForm(form) {
         const loadingSpinner = document.getElementById('loadingSpinner');
+        if (!loadingSpinner) {
+            console.error('loadingSpinner not found');
+            return;
+        }
 
         const formData = new FormData(form);
 
-        console.log('Submit Edit Form Data:', Array.from(formData.entries())); // 제출할 데이터 로그 출력
+        console.log('Submit Edit Form Data:', Array.from(formData.entries()));
 
         if (!formData.get('user_id')) {
             console.error('user_id is missing in the form data');
@@ -371,12 +413,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response && response.success) {
                     hideAllForms(formContainers);
                     loadData();
+                    if (editSuccessModal) {
+                        editSuccessModal.show();
+                    }
                 } else {
+                    if (editFailModal) {
+                        editFailModal.show();
+                    }
                     console.error('Error updating user:', response);
                 }
             })
             .catch(error => {
                 loadingSpinner.style.display = 'none';
+                if (editFailModal) {
+                    editFailModal.show();
+                }
                 console.error('Error submitting edit form:', error);
             });
     }
