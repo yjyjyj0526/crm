@@ -5,35 +5,39 @@
 <body>
 <div class="registration-container" id="registrationContainer" th:fragment="registrationForm">
     <div class="registration-form">
-        <h3>등록 폼</h3>
+        <h3>顧客社登録</h3>
         <form id="registrationForm" enctype="multipart/form-data">
             <div>
-                <label for="user_id">직원 ID</label>
-                <input type="text" id="user_id" name="user_id" required class="form-control" />
+                <label for="company_name">顧客社名</label>
+                <input type="text" id="company_name" name="company_name" required class="form-control" />
             </div>
             <div>
-                <label for="user_name">직원명</label>
-                <input type="text" id="user_name" name="user_name" required class="form-control" />
+                <label for="CEO_name">代表者名</label>
+                <input type="text" id="CEO_name" name="CEO_name" required class="form-control" />
             </div>
             <div>
-                <label for="password">비밀번호</label>
-                <input type="password" id="password" name="password" required class="form-control" />
-            </div>
-            <div>
-                <label for="phone_number">전화번호</label>
+                <label for="phone_number">電話番号</label>
                 <input type="text" id="phone_number" name="phone_number" required class="form-control" />
             </div>
             <div>
-                <label for="department">부서</label>
-                <input type="text" id="department" name="department" required class="form-control" />
+                <label for="post_number">郵便番号</label>
+                <input type="text" id="post_number" name="post_number" required class="form-control" />
             </div>
             <div>
-                <label for="authority">권한</label>
-                <input type="number" id="authority" name="authority" required class="form-control" />
+                <label for="address">住所</label>
+                <input type="number" id="address" name="address" required class="form-control" />
             </div>
             <div>
-                <label for="profile_image">프로필 이미지 업로드</label>
-                <input type="file" id="profile_image" name="profile_image" class="form-control" />
+                <label for="homepage">ホームページ</label>
+                <input type="number" id="homepage" name="homepage" required class="form-control" />
+            </div>
+            <div>
+                <label for="business_type">業種</label>
+                <input type="number" id="business_type" name="business_type" required class="form-control" />
+            </div>
+            <div>
+                <label for="contract_type">契約方式</label>
+                <input type="number" id="contract_type" name="contract_type" required class="form-control" />
             </div>
             <input type="hidden" id="register_member_id" name="register_member_id" th:value="${#authentication.name}" />
             <button type="submit" class="btn btn-success mt-3">등록</button>
@@ -47,14 +51,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="registrationSuccessModalLabel">등록 성공</h5>
+                <h5 class="modal-title" id="registrationSuccessModalLabel">登録成功</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                사용자가 성공적으로 등록되었습니다.
+                登録成功
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -65,14 +69,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="registrationFailModalLabel">등록 실패</h5>
+                <h5 class="modal-title" id="registrationFailModalLabel">登録失敗</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                사용자 등록 중 오류가 발생했습니다.
+                登録失敗
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

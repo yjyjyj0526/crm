@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/user")
 public class UserApiController {
 
     @Value("${spring.servlet.multipart.location}")
@@ -33,7 +34,7 @@ public class UserApiController {
     @Autowired
     UserService service;
 
-    //파일 저장
+    //ファイルセーブ
     private String saveFile(MultipartFile file) {
         if (file != null && !file.isEmpty()) {
             return FileService.saveFile(file, uploadPath);
@@ -41,7 +42,7 @@ public class UserApiController {
         return null;
     }
 
-    //파일 삭제
+    //ファイル削除
     private void deleteFile(String fileName) {
         if (fileName != null && !fileName.isEmpty()) {
             Path filePath = Paths.get(uploadPath, fileName);
@@ -54,7 +55,7 @@ public class UserApiController {
         }
     }
 
-    // 파일을 Base64로 인코딩하여 반환하는 메서드
+    // Base64
     private String encodeFileToBase64(String filePath) throws IOException {
         if (filePath != null && !filePath.isEmpty()) {
             Path path = Paths.get(uploadPath, filePath);
@@ -66,8 +67,8 @@ public class UserApiController {
         return null;
     }
 
-    //회원가입
-    @PostMapping("/user/register")
+    //社員登録
+    @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> joinUser(
             @RequestParam(value = "profile_image", required = false) MultipartFile profile_image,
             @RequestParam("user_id") String userId,
@@ -83,7 +84,7 @@ public class UserApiController {
         try {
             if (service.findUserID(userId)) {
                 response.put("success", false);
-                response.put("message", "사용할 수 없는 ID입니다.");
+                response.put("message", "使えないIDです。");
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
             } else {
                 String image = (profile_image != null && !profile_image.isEmpty()) ? saveFile(profile_image) : null;
@@ -100,7 +101,7 @@ public class UserApiController {
                 user.setAuthority(authority);
                 user.setRegister_member_id(registerMemberId);
                 user.setRegistration_date(formattedDate);
-                user.setProfile_image_path(image);  // 파일 경로 설정
+                user.setProfile_image_path(image);
                 service.joinUser(user);
 
                 response.put("success", true);
@@ -109,25 +110,13 @@ public class UserApiController {
             }
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "ユーザー登録 실패: " + e.getMessage());
+            response.put("message", "ユーザー登録失敗: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 
-    //パスワード検証
-    @PostMapping("/user/check")
-    public ResponseEntity<?> checkUser(@RequestParam("user_id") String user_id,
-                                       @RequestParam("password") String inputPassword){
-        boolean check = service.checkUser(user_id, inputPassword);
-
-        if(check) {
-            return ResponseEntity.ok("パスワード検証成功");
-        } else {
-            return ResponseEntity.status(401).body("パスワード検証失敗");
-        }
-    }
-
-    @PostMapping("/user/update")
+    //　社員情報修正
+    @PostMapping("/update")
     public ResponseEntity<Map<String, Object>> updateUser(
             @RequestParam("user_id") String userId,
             @RequestParam("user_name") String userName,
@@ -138,16 +127,6 @@ public class UserApiController {
             @RequestParam(value = "profile_image", required = false) MultipartFile profileImage) {
 
         Map<String, Object> response = new HashMap<>();
-
-        // 파라미터 값 확인을 위한 로깅
-        System.out.println("Received parameters:");
-        System.out.println("user_id: " + userId);
-        System.out.println("user_name: " + userName);
-        System.out.println("phone_number: " + phoneNumber);
-        System.out.println("department: " + department);
-        System.out.println("authority: " + authority);
-        System.out.println("update_member_id: " + updateMemberId);
-        System.out.println("profile_image: " + (profileImage != null ? profileImage.getOriginalFilename() : "No file"));
 
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
@@ -184,7 +163,7 @@ public class UserApiController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/user/list/json")
+    @GetMapping("/list/json")
     public ResponseEntity<Map<String, Object>> getUserListJson(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(name = "categorySelect", required = false) String categorySelect,
@@ -196,7 +175,7 @@ public class UserApiController {
         int pagePerGroup = 5;
 
         if (searchText == null || searchText.isEmpty()) {
-            searchText = null; // 검색어가 없으면 검색 조건을 null로 설정
+            searchText = null;
         }
 
         PagenationUtil navi = service.getPageNavigator(pagePerGroup, countPerPage, page, categorySelect, searchText);
@@ -211,16 +190,15 @@ public class UserApiController {
         response.put("searchText", searchText);
         response.put("countPerPage", countPerPage);
 
-        System.out.println("Pagination data being sent: " + navi);  // 로그로 Pagination 데이터 출력
         if (navi != null) {
-            response.put("totalPages", navi.getTotalPageCount()); // navi 객체에서 총 페이지 수 포함
+            response.put("totalPages", navi.getTotalPageCount());
         }
 
         return ResponseEntity.ok(response);
     }
 
     // 특정 사용자의 상세 정보를 JSON 형태로 반환
-    @GetMapping(value = "/user/details/{user_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/details/{user_id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> getUserDetails(@PathVariable String user_id) {
         UserList user = service.userDetails(user_id);
         if (user != null) {
@@ -239,7 +217,7 @@ public class UserApiController {
     }
 
     // 특정 사용자의 수정 정보를 JSON 형태로 반환
-    @GetMapping("/user/edit/{user_id}")
+    @GetMapping("/edit/{user_id}")
     public ResponseEntity<UserList> getUserEditInfo(@PathVariable String user_id) {
         UserList user = service.userDetails(user_id);
         if (user != null) {
@@ -250,7 +228,7 @@ public class UserApiController {
     }
 
     //社員削除
-    @PostMapping("/user/delete")
+    @PostMapping("/delete")
     public String userDelete(String user_id){
         service.userDelete(user_id);
         return "";

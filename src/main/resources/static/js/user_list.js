@@ -338,11 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const editSuccessModal = initializeModal('editSuccessModal', 'editSuccessModal');
     const editFailModal = initializeModal('editFailModal', 'editFailModal');
 
-    if (!registrationSuccessModal) console.warn('등록 성공 모달 요소를 찾을 수 없습니다.');
-    if (!registrationFailModal) console.warn('등록 실패 모달 요소를 찾을 수 없습니다.');
-    if (!editSuccessModal) console.warn('수정 성공 모달 요소를 찾을 수 없습니다.');
-    if (!editFailModal) console.warn('수정 실패 모달 요소를 찾을 수 없습니다.');
-
     function submitRegistrationForm(form) {
         const loadingSpinner = document.getElementById('loadingSpinner');
         if (!loadingSpinner) {
@@ -351,8 +346,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const formData = new FormData(form);
-
-        console.log('Submit Registration Form Data:', Array.from(formData.entries()));
 
         loadingSpinner.style.display = 'block';
 
@@ -393,8 +386,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const formData = new FormData(form);
-
-        console.log('Submit Edit Form Data:', Array.from(formData.entries()));
 
         if (!formData.get('user_id')) {
             console.error('user_id is missing in the form data');

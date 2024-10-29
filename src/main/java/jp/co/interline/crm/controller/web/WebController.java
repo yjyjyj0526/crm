@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class UserWebController {
+public class WebController {
 
     //로그인폼 이동
     @GetMapping("/loginform")
@@ -23,5 +23,10 @@ public class UserWebController {
     public String userListForManager(){
 
         return "user_list";
+    }
+
+    @GetMapping("/company/list")
+    public String companyList(){
+        return "company_list";
     }
 }

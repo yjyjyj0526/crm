@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         params.append('order', currentOrder);
         params.append('orderDirection', orderDirection);
 
-        fetchData(`/user/list/json?${params}`)
+        fetchData(`/company/list/json?${params}`)
             .then(data => {
                 if (!data || !Array.isArray(data.list)) throw new Error('Invalid users data');
                 populateTable(data.list, data.countPerPage || 10);
@@ -203,35 +203,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function populateTable(users, countPerPage = 10) {
-        const userTableBody = document.getElementById('userTableBody');
+        const userTableBody = document.getElementById('companyTableBody');
         if (!userTableBody) {
             console.error('userTableBody not found');
             return;
         }
 
-        userTableBody.innerHTML = '';
+        companyTableBody.innerHTML = '';
 
-        users.forEach(user => {
+        users.forEach(company => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${user.user_id}</td>
-                <td>${user.user_name}</td>
-                <td>${user.phone_number}</td>
-                <td>${user.department}</td>
-                <td>${user.authority}</td>
+                <td>${company.company_name}</td>
+                <td>${company.CEO_name}</td>
+                <td>${company.phone_number}</td>
+                <td>${company.business_type}</td>
+                <td>${company.contract_type}</td>
                 <td>
-                    <button class="btn btn-info detailButton" data-id="${user.user_id}">상세</button>
-                    <button class="btn btn-warning editButton" data-id="${user.user_id}">수정</button>
+                    <button class="btn btn-info detailButton" data-id="${company.user_id}">상세</button>
+                    <button class="btn btn-warning editButton" data-id="${company.user_id}">수정</button>
                 </td>
             `;
-            userTableBody.appendChild(row);
+            companyTableBody.appendChild(row);
         });
 
         const remainingRows = countPerPage - users.length;
         for (let i = 0; i < remainingRows; i++) {
             const row = document.createElement('tr');
             row.innerHTML = '<td colspan="6">&nbsp;</td>';
-            userTableBody.appendChild(row);
+            companyTableBody.appendChild(row);
         }
     }
 
@@ -269,8 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
         paginationContainer.appendChild(createPageItem(totalPages, '>>', currentPage === totalPages));
     }
 
-    function fetchUserDetails(user_id) {
-        fetchData(`/user/details/${user_id}`)
+    function fetchUserDetails(company_id) {
+        fetchData(`/company/details/${company_id}`)
             .then(data => {
                 if (data) {
                     hideAllForms(formContainers);
@@ -283,8 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error fetching user details:', error));
     }
 
-    function fetchUserEditForm(user_id) {
-        fetchData(`/user/edit/${user_id}`)
+    function fetchUserEditForm(company_id) {
+        fetchData(`/company/edit/${company_id}`)
             .then(data => {
                 if (data) {
                     document.getElementById('edit_user_id').value = data.user_id;

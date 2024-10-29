@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+</head>
+<body>
+<div class="registration-container" id="detailContainer" th:fragment="detailForm">
+    <div class="registration-form">
+        <h3>顧客社情報</h3>
+        <form id="detailForm">
+            <div class="form-group">
+                <label for="detail_company_name">顧客社名</label>
+                <input type="text" id="detail_company_name" name="company_name" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_CEO_name">代表者名</label>
+                <input type="text" id="detail_CEO_name" name="CEO_name" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_phone_number">電話番号</label>
+                <input type="text" id="detail_phone_number" name="phone_number" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_phone_number">郵便番号</label>
+                <input type="text" id="detail_post_number" name="post_number" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_address">住所</label>
+                <input type="text" id="detail_address" name="address" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_homepage">ホームページ</label>
+                <input type="text" id="detail_homepage" name="detail_homepage" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_business_type">業種</label>
+                <input type="number" id="detail_business_type" name="business_type" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_contract_type">契約方式</label>
+                <input type="number" id="detail_contract_type" name="contract_type" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-secondary" id="detailCancelButton">닫기</button>
+                <button type="button" class="btn btn-primary editButton" id="detailEditButton" data-id="2222">수정</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
