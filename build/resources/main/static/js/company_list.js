@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formContainers = [registrationContainer, detailContainer, editContainer];
 
     const sortableHeaders = document.querySelectorAll('.sortable');
-    let currentOrder = 'user_name';
+    let currentOrder = 'company_name';
     let orderDirection = 'ASC';
 
     sortableHeaders.forEach(header => {
@@ -125,11 +125,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', event => {
         if (event.target.classList.contains('detailButton')) {
-            const user_id = event.target.getAttribute('data-id');
-            fetchUserDetails(user_id);
+            const company_id = event.target.getAttribute('data-id');
+            fetchCompanyDetails(company_id);
         } else if (event.target.classList.contains('editButton')) {
-            const user_id = event.target.getAttribute('data-id');
-            fetchUserEditForm(user_id);
+            const company_id = event.target.getAttribute('data-id');
+            fetchCompanyEditForm(company_id);
         }
     });
 
@@ -195,39 +195,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fetchData(`/company/list/json?${params}`)
             .then(data => {
-                if (!data || !Array.isArray(data.list)) throw new Error('Invalid users data');
+                if (!data || !Array.isArray(data.list)) throw new Error('Invalid companys data');
                 populateTable(data.list, data.countPerPage || 10);
                 setupPagination(data.totalPages, page);
             })
-            .catch(error => console.error('Error loading user list:', error));
+            .catch(error => console.error('Error loading company list:', error));
     }
 
-    function populateTable(users, countPerPage = 10) {
-        const userTableBody = document.getElementById('companyTableBody');
-        if (!userTableBody) {
-            console.error('userTableBody not found');
+    function populateTable(companys, countPerPage = 10) {
+        const companyTableBody = document.getElementById('companyTableBody');
+        if (!companyTableBody) {
+            console.error('companyTableBody not found');
             return;
         }
 
         companyTableBody.innerHTML = '';
 
-        users.forEach(company => {
+        companys.forEach(company => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${company.company_name}</td>
-                <td>${company.CEO_name}</td>
+                <td>${company.ceo_name}</td>
                 <td>${company.phone_number}</td>
                 <td>${company.business_type}</td>
                 <td>${company.contract_type}</td>
                 <td>
-                    <button class="btn btn-info detailButton" data-id="${company.user_id}">상세</button>
-                    <button class="btn btn-warning editButton" data-id="${company.user_id}">수정</button>
+                    <button class="btn btn-info detailButton" data-id="${company.company_id}">상세</button>
+                    <button class="btn btn-warning editButton" data-id="${company.company_id}">수정</button>
                 </td>
             `;
             companyTableBody.appendChild(row);
         });
 
-        const remainingRows = countPerPage - users.length;
+        const remainingRows = countPerPage - companys.length;
         for (let i = 0; i < remainingRows; i++) {
             const row = document.createElement('tr');
             row.innerHTML = '<td colspan="6">&nbsp;</td>';
@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
         paginationContainer.appendChild(createPageItem(totalPages, '>>', currentPage === totalPages));
     }
 
-    function fetchUserDetails(company_id) {
+    function fetchCompanyDetails(company_id) {
         fetchData(`/company/details/${company_id}`)
             .then(data => {
                 if (data) {
@@ -277,51 +277,49 @@ document.addEventListener('DOMContentLoaded', () => {
                     fillDetailForm(data);
                     showForm(detailContainer);
                 } else {
-                    console.error('No data received for user details');
+                    console.error('No data received for company details');
                 }
             })
-            .catch(error => console.error('Error fetching user details:', error));
+            .catch(error => console.error('Error fetching company details:', error));
     }
 
-    function fetchUserEditForm(company_id) {
+    function fetchCompanyEditForm(company_id) {
         fetchData(`/company/edit/${company_id}`)
             .then(data => {
                 if (data) {
-                    document.getElementById('edit_user_id').value = data.user_id;
-                    document.getElementById('edit_user_name').value = data.user_name;
+                    document.getElementById('edit_company_id').value = data.company_id;
+                    document.getElementById('edit_company_name').value = data.company_name;
+                    document.getElementById('edit_ceo_name').value = data.ceo_name;
                     document.getElementById('edit_phone_number').value = data.phone_number;
-                    document.getElementById('edit_department').value = data.department;
-                    document.getElementById('edit_authority').value = data.authority;
-                    document.getElementById('edit_profile_image').value = '';
+                    document.getElementById('edit_post_number').value = data.post_number;
+                    document.getElementById('edit_address').value = data.address;
+                    document.getElementById('edit_homepage').value = data.homepage;
+                    document.getElementById('edit_business_type').value = data.business_type;
+                    document.getElementById('edit_contract_type').value = data.contract_type;
                     hideAllForms(formContainers);
                     showForm(editContainer);
                 } else {
-                    console.error('No data received for user edit form');
+                    console.error('No data received for company edit form');
                 }
             })
-            .catch(error => console.error('Error fetching user edit form:', error));
+            .catch(error => console.error('Error fetching company edit form:', error));
     }
 
     function fillDetailForm(data) {
-        if (!data || !data.user) {
+        if (!data || !data.company) {
             console.error('Invalid data provided for filling detail form:', data);
             return;
         }
 
-        const user = data.user;
-        document.getElementById('detail_user_id').value = user.user_id;
-        document.getElementById('detail_user_name').value = user.user_name;
-        document.getElementById('detail_phone_number').value = user.phone_number;
-        document.getElementById('detail_department').value = user.department;
-        document.getElementById('detail_authority').value = user.authority;
-        document.getElementById('detail_profile_image').value = user.profile_image;
-
-        const profileImageElement = document.getElementById('detail_profile_image');
-        if (data.profile_image_base64) {
-            profileImageElement.src = `data:image/png;base64,${data.profile_image_base64}`;
-        } else {
-            profileImageElement.src = '/images/default-profile.png';
-        }
+        const company = data.company;
+        document.getElementById('detail_company_name').value = company.company_name;
+        document.getElementById('detail_ceo_name').value = company.ceo_name;
+        document.getElementById('detail_phone_number').value = company.phone_number;
+        document.getElementById('detail_post_number').value = company.post_number;
+        document.getElementById('detail_address').value = company.address;
+        document.getElementById('detail_homepage').value = company.homepage;
+        document.getElementById('detail_business_type').value = company.business_type;
+        document.getElementById('detail_contract_type').value = company.contract_type;
     }
 
     function initializeModal(elementId, modalName) {
@@ -349,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         loadingSpinner.style.display = 'block';
 
-        fetch('/user/register', {
+        fetch('/company/register', {
             method: 'POST',
             body: formData,
         })
@@ -366,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (registrationFailModal) {
                         registrationFailModal.show();
                     }
-                    console.error('Error registering user:', response);
+                    console.error('Error registering company:', response);
                 }
             })
             .catch(error => {
@@ -387,14 +385,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = new FormData(form);
 
-        if (!formData.get('user_id')) {
-            console.error('user_id is missing in the form data');
+        if (!formData.get('company_id')) {
+            console.error('company_id is missing in the form data');
             return;
         }
 
         loadingSpinner.style.display = 'block';
 
-        fetch('/user/update', {
+        fetch('/company/update', {
             method: 'POST',
             body: formData,
         })
@@ -411,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (editFailModal) {
                         editFailModal.show();
                     }
-                    console.error('Error updating user:', response);
+                    console.error('Error updating company:', response);
                 }
             })
             .catch(error => {
