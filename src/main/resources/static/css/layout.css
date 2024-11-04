@@ -194,3 +194,8 @@ main.content.collapsed {
 .profile-icon.active .dropdown-menu {
     display: block;
 }
+
+/* 애니메이션 비활성화 클래스 */
+.no-transition {
+    transition: none !important;
+}

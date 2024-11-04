@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>사용자 리스트</title>
+  <title>INTERLINE CRM</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300..900&display=swap" rel="stylesheet">
@@ -17,45 +17,45 @@
 <div th:replace="layout :: header" class="header"></div>
 <main class="content" id="contentMain">
   <div class="content-wrapper">
-    <h2 class="text-center">사용자 리스트</h2>
+    <h2 class="text-center">顧客リスト</h2>
     <div class="d-flex justify-content-between mb-3">
       <form id="searchForm" method="get" class="d-flex align-items-center">
         <div class="form-group me-2">
           <select name="categorySelect" id="categorySelect" class="form-select me-2">
-            <option value="user_id">UserID</option>
-            <option value="user_name">UserName</option>
+            <option value="manager_name">顧客名</option>
+<!--            <option value="manager_name">managerName</option>-->
           </select>
         </div>
         <div class="form-group me-2">
-          <input type="text" id="searchText" name="searchText" class="form-control me-2" placeholder="검색 텍스트를 입력하세요">
+          <input type="text" id="searchText" name="searchText" class="form-control me-2" placeholder="検索テキスト入力">
           <input type="hidden" id="view" name="view">
         </div>
-        <button type="submit" class="btn btn-primary">검색</button>
+        <button type="submit" class="btn btn-primary">検索</button>
       </form>
-      <button class="btn btn-primary" id="registerButton">등록</button>
+      <button class="btn btn-primary" id="registerButton">登録</button>
     </div>
     <div id="loadingSpinner" style="display:none;">
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
-    <div class="table-responsive" id="userTableContainer">
-      <table class="table table-bordered table-hover mt-3" id="userTable">
+    <div class="table-responsive" id="managerTableContainer">
+      <table class="table table-bordered table-hover mt-3" id="managerTable">
         <thead class="table-dark">
         <tr>
-          <th class="sortable" data-order="user_id">직원 ID
+          <th class="sortable" data-order="company_id">顧客社名
             <span class="sort-icons">
               <b class="icon-asc">⇑</b>
               <b class="icon-desc">⇓</b>
             </span>
           </th>
-          <th class="sortable" data-order="user_name">직원명
+          <th class="sortable" data-order="manager_id">顧客名
             <span class="sort-icons">
               <b class="icon-asc">⇑</b>
               <b class="icon-desc">⇓</b>
             </span>
           </th>
-          <th class="sortable" data-order="phone_number">전화번호
+          <th class="sortable" data-order="manager_mail">EMAIL
             <span class="sort-icons">
               <b class="icon-asc">⇑</b>
               <b class="icon-desc">⇓</b>
@@ -67,7 +67,7 @@
               <b class="icon-desc">⇓</b>
             </span>
           </th>
-          <th class="sortable" data-order="authority">권한
+          <th class="sortable" data-order="position">position
             <span class="sort-icons">
               <b class="icon-asc">⇑</b>
               <b class="icon-desc">⇓</b>
@@ -76,20 +76,20 @@
           <th>조작</th>
         </tr>
         </thead>
-        <tbody id="userTableBody"></tbody>
+        <tbody id="managerTableBody"></tbody>
       </table>
     </div>
     <div id="paginationContainer" class="pagination-container d-flex justify-content-center">
       <ul class="pagination"></ul>
     </div>
   </div>
-  <div th:insert="user_registration_form :: registrationForm"></div>
-  <div th:insert="user_registration_form :: registrationSuccessModal"></div>
-  <div th:insert="user_registration_form :: registrationFailModal"></div>
-  <div th:insert="user_detail_form :: detailForm"></div>
-  <div th:insert="user_edit_form :: editForm"></div>
-  <div th:insert="user_edit_form :: editSuccessModal"></div>
-  <div th:insert="user_edit_form :: editFailModal"></div>
+  <div th:insert="/manager/manager_registration_form :: registrationForm"></div>
+  <div th:insert="/manager/manager_registration_form :: registrationSuccessModal"></div>
+  <div th:insert="/manager/manager_registration_form :: registrationFailModal"></div>
+  <div th:insert="/manager/manager_detail_form :: detailForm"></div>
+  <div th:insert="/manager/manager_edit_form :: editForm"></div>
+  <div th:insert="/manager/manager_edit_form :: editSuccessModal"></div>
+  <div th:insert="/manager/manager_edit_form :: editFailModal"></div>
 </main>
 <script th:inline="javascript">
   /*<![CDATA[*/
@@ -100,6 +100,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="/js/layout.js"></script>
-<script src="/js/user_list.js"></script>
+<script src="/js/manager_list.js"></script>
 </body>
 </html>

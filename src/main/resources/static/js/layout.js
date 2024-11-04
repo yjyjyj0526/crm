@@ -14,10 +14,38 @@ document.addEventListener('DOMContentLoaded', function() {
         const profileIcon = document.querySelector('.profile-icon');
         const profileMenu = document.querySelector('#profileMenu');
 
+        // 애니메이션 비활성화
+        sidebar.classList.add('no-transition');
+        content.classList.add('no-transition');
+        header.classList.add('no-transition');
+
+        // 페이지 로드 시 로컬 스토리지로부터 상태를 불러오기
+        if (localStorage.getItem("sidebarState") === "expanded") {
+                sidebar.classList.add('expanded');
+                content.classList.add('collapsed');
+                header.classList.add('expanded');
+        }
+
+        // 애니메이션 활성화 (다음 프레임에서)
+        requestAnimationFrame(() => {
+                sidebar.classList.remove('no-transition');
+                content.classList.remove('no-transition');
+                header.classList.remove('no-transition');
+        });
+
+        // 햄버거 버튼 클릭 시 상태 토글 및 로컬 스토리지에 저장
         hamburger.addEventListener('click', function() {
-                sidebar.classList.toggle('expanded');
-                content.classList.toggle('collapsed');
-                header.classList.toggle('expanded');
+                if (sidebar.classList.contains('expanded')) {
+                        sidebar.classList.remove('expanded');
+                        content.classList.remove('collapsed');
+                        header.classList.remove('expanded');
+                        localStorage.setItem("sidebarState", "collapsed");
+                } else {
+                        sidebar.classList.add('expanded');
+                        content.classList.add('collapsed');
+                        header.classList.add('expanded');
+                        localStorage.setItem("sidebarState", "expanded");
+                }
         });
 
         profileIcon.addEventListener('click', function(e) {

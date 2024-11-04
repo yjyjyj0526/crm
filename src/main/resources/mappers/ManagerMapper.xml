@@ -50,12 +50,13 @@
     <select id="managerList" parameterType="hashmap" resultType="jp.co.interline.crm.domain.ClientManager">
         SELECT *
         FROM ClientManager
-        WHERE
-        <if test="categorySelect == null or categorySelect == ''">
-            <if test="searchText != null and searchText != ''">
-                (company_id LIKE CONCAT('%', #{searchText}, '%') OR company_name LIKE CONCAT('%', #{searchText}, '%'))
+        <where>
+            <if test="categorySelect == null or categorySelect == ''">
+                <if test="searchText != null and searchText != ''">
+                    (company_id LIKE CONCAT('%', #{searchText}, '%') OR company_name LIKE CONCAT('%', #{searchText}, '%'))
+                </if>
             </if>
-        </if>
+        </where>
         ORDER BY
         <choose>
             <when test="order == 'manager_id'">
@@ -71,22 +72,23 @@
     <select id="getTotal" parameterType="hashmap" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM ClientManager
-        WHERE
-        <if test="categorySelect != null and categorySelect != ''">
-            <choose>
-                <when test="categorySelect == 'manager_id'">
-                    manager_id LIKE CONCAT('%', #{searchText}, '%')
-                </when>
-                <when test="categorySelect == 'manager_name'">
-                    AND manager_name LIKE CONCAT('%', #{searchText}, '%')
-                </when>
-            </choose>
-        </if>
-        <if test="categorySelect == null or categorySelect == ''">
-            <if test="searchText != null and searchText != ''">
-                AND (manager_id LIKE CONCAT('%', #{searchText}, '%') OR manager_name LIKE CONCAT('%', #{searchText}, '%'))
+        <where>
+            <if test="categorySelect != null and categorySelect != ''">
+                <choose>
+                    <when test="categorySelect == 'manager_id'">
+                        manager_id LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="categorySelect == 'manager_name'">
+                        AND manager_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
             </if>
-        </if>
+            <if test="categorySelect == null or categorySelect == ''">
+                <if test="searchText != null and searchText != ''">
+                    AND (manager_id LIKE CONCAT('%', #{searchText}, '%') OR manager_name LIKE CONCAT('%', #{searchText}, '%'))
+                </if>
+            </if>
+        </where>
     </select>
 
     <select id="managerDetails" resultType="jp.co.interline.crm.domain.ClientManager">

@@ -22,11 +22,16 @@ public class WebController {
     @GetMapping("/user/list")
     public String userListForManager(){
 
-        return "user_list";
+        return "/user/user_list";
     }
 
     @GetMapping("/company/list")
     public String companyList(){
-        return "company_list";
+        return "/company/company_list";
+    }
+
+    @GetMapping("/manager/list")
+    public String cmanagerList(){
+        return "/manager/manager_list";
     }
 }

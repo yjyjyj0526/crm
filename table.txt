@@ -1,13 +1,17 @@
 CREATE TABLE UserList (
     user_id VARCHAR(30) NOT NULL PRIMARY KEY,
     user_name VARCHAR(100) NOT NULL,
+    user_name_phonetic VARCHAR(100),
     password VARCHAR(255) NOT NULL,
     phone_number VARCHAR(20),
+    email VARCHAR(100),
+    joining_date DATE,
+    date_of_birth VARCHAR(20),
     department VARCHAR(100),
     authority INT NOT NULL DEFAULT 1,
-    registration_date VARCHAR(20) NOT NULL,
+    registration_date DATETIME,
     register_member_id VARCHAR(30) NOT NULL,
-    update_date VARCHAR(20),
+    update_date DATETIME,
     update_member_id VARCHAR(30),
     enabled INT DEFAULT 1,
     profile_image_path VARCHAR(255)
@@ -64,4 +68,4 @@ CREATE TABLE ContactHistory (
     update_member_id VARCHAR(30)
 );
 
-ALTER TABLE ContactHistory AUTO_INCREMENT = 30001;
+ALTER TABLE ContactHistory AUTO_INCREMENT = 40001;

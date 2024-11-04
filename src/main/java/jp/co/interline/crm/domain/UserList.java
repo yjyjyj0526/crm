@@ -12,6 +12,9 @@ public class UserList {
     private String user_name;
     private String password;
     private String phone_number;
+    private String email;
+    private String joining_date;
+    private String date_of_birth;
     private String department;
     private int authority;
     private String registration_date;

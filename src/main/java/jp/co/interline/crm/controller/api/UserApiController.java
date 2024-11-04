@@ -76,6 +76,9 @@ public class UserApiController {
             @RequestParam("password") String password,
             @RequestParam(value = "phone_number", required = false) String phoneNumber,
             @RequestParam(value = "department", required = false) String department,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "joining_date", required = false) String joiningDate,
+            @RequestParam(value = "date_of_birth", required = false)String dateOfBirth,
             @RequestParam("authority") int authority,
             @RequestParam("register_member_id") String registerMemberId) {
 
@@ -89,18 +92,19 @@ public class UserApiController {
             } else {
                 String image = (profile_image != null && !profile_image.isEmpty()) ? saveFile(profile_image) : null;
                 LocalDateTime now = LocalDateTime.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
-                String formattedDate = now.format(formatter);
 
                 UserList user = new UserList();
                 user.setUser_id(userId);
                 user.setUser_name(userName);
                 user.setPassword(password);
                 user.setPhone_number(phoneNumber);
+                user.setEmail(email);
+                user.setJoining_date(joiningDate);
+                user.setDate_of_birth(dateOfBirth);
                 user.setDepartment(department);
                 user.setAuthority(authority);
                 user.setRegister_member_id(registerMemberId);
-                user.setRegistration_date(formattedDate);
+                user.setRegistration_date(String.valueOf(now));
                 user.setProfile_image_path(image);
                 service.joinUser(user);
 
@@ -121,6 +125,9 @@ public class UserApiController {
             @RequestParam("user_id") String userId,
             @RequestParam("user_name") String userName,
             @RequestParam("phone_number") String phoneNumber,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "joining_date", required = false) String joiningDate,
+            @RequestParam(value = "date_of_birth", required = false)String dateOfBirth,
             @RequestParam("department") String department,
             @RequestParam("authority") int authority,
             @RequestParam("update_member_id") String updateMemberId,
@@ -129,8 +136,6 @@ public class UserApiController {
         Map<String, Object> response = new HashMap<>();
 
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
-        String formattedDate = now.format(formatter);
 
         UserList user = service.userDetails(userId); // 기존 사용자 정보를 가져옵니다.
         if (user == null) {
@@ -151,10 +156,13 @@ public class UserApiController {
 
         user.setUser_name(userName);
         user.setPhone_number(phoneNumber);
+        user.setEmail(email);
+        user.setJoining_date(joiningDate);
+        user.setDate_of_birth(dateOfBirth);
         user.setDepartment(department);
         user.setAuthority(authority);
         user.setUpdate_member_id(updateMemberId);
-        user.setUpdate_date(formattedDate);
+        user.setUpdate_date(String.valueOf(now));
 
         service.updateUser(user);
 

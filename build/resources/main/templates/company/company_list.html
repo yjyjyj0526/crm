@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사용자 리스트</title>
+    <title>INTERLINE CRM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300..900&display=swap" rel="stylesheet">
@@ -83,13 +83,13 @@
             <ul class="pagination"></ul>
         </div>
     </div>
-    <div th:insert="company_registration_form :: registrationForm"></div>
-    <div th:insert="company_registration_form :: registrationSuccessModal"></div>
-    <div th:insert="company_registration_form :: registrationFailModal"></div>
-    <div th:insert="company_detail_form :: detailForm"></div>
-    <div th:insert="company_edit_form :: editForm"></div>
-    <div th:insert="company_edit_form :: editSuccessModal"></div>
-    <div th:insert="company_edit_form :: editFailModal"></div>
+    <div th:insert="/company/company_registration_form :: registrationForm"></div>
+    <div th:insert="/company/company_registration_form :: registrationSuccessModal"></div>
+    <div th:insert="/company/company_registration_form :: registrationFailModal"></div>
+    <div th:insert="/company/company_detail_form :: detailForm"></div>
+    <div th:insert="/company/company_edit_form :: editForm"></div>
+    <div th:insert="/company/company_edit_form :: editSuccessModal"></div>
+    <div th:insert="/company/company_edit_form :: editFailModal"></div>
 </main>
 <script th:inline="javascript">
     /*<![CDATA[*/

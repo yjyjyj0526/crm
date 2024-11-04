@@ -96,7 +96,7 @@ public class ManagerApiController {
         service.updateManager(manager);
 
         response.put("success", true);
-        response.put("message", "顧客上方修正成功");
+        response.put("message", "顧客情報修正成功");
         return ResponseEntity.ok(response);
     }
 

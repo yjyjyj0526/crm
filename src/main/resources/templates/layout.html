@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM 대시보드</title>
+    <title>INTERLINE CRM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
@@ -11,7 +11,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="/css/header.css" rel="stylesheet">
     <link href="/css/layout.css" rel="stylesheet">
-    <!-- Spring Security Thymeleaf -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/thymeleaf/3.0.12.RELEASE/thymeleaf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/thymeleaf-spring5/3.0.12.RELEASE/thymeleaf-spring5.min.js"></script>
 </head>
@@ -37,8 +36,14 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/company/list">
-                    <i class="bi bi-person-badge"></i>
+                    <i class="bi bi-building-fill"></i>
                     <span class="nav-text">顧客社管理</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/manager/list">
+                    <i class="bi bi-person-fill"></i>
+                    <span class="nav-text">顧客管理</span>
                 </a>
             </li>
         </ul>
@@ -57,8 +62,8 @@
         <div class="profile-icon">
             <img src="/images/default-profile.png" id="profileImage" class="rounded-circle">
             <div class="dropdown-menu" id="profileMenu">
-                <a class="dropdown-item" href="/user/profile">회원 정보 수정</a>
-                <a class="dropdown-item" href="/logout">로그아웃</a>
+                <a class="dropdown-item" href="/user/profile">ユーザー情報</a>
+                <a class="dropdown-item" href="/logout">ログアウト</a>
             </div>
         </div>
     </div>
@@ -66,9 +71,12 @@
 
 <!-- 메인 콘텐츠 영역 -->
 <main class="content" th:fragment="content">
-
+    <!-- 여기에 콘텐츠가 삽입될 것입니다. -->
 </main>
-
+<script>
+    // 유저 ID를 JavaScript 변수로 전달
+    const userId = /*[[${#authentication.name}]]*/ 'defaultUserId';
+</script>
 <script src="/js/layout.js" defer></script>
 </body>
 </html>
