@@ -18,6 +18,11 @@ public class WebController {
         return "login_form";
     }
 
+    @GetMapping({"","/"})
+    public String main(){
+        return "initial";
+    }
+
     //社員リスト
     @GetMapping("/user/list")
     public String userListForManager(){
@@ -31,7 +36,12 @@ public class WebController {
     }
 
     @GetMapping("/manager/list")
-    public String cmanagerList(){
+    public String managerList(){
         return "/manager/manager_list";
+    }
+
+    @GetMapping("/sales/list")
+    public String salesList(){
+        return "/sales/sales_list";
     }
 }

@@ -53,9 +53,25 @@ CREATE TABLE ClientManager (
 
 ALTER TABLE ClientManager AUTO_INCREMENT = 20001;
 
+CREATE TABLE SalesOpportunity (
+    opportunity_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    opportunity_name VARCHAR(100) NOT NULL,
+    company_id INT NOT NULL,
+    close_date DATETIME,                     -- 종료 날짜
+    registration_date DATETIME NOT NULL,
+    register_member_id VARCHAR(30) NOT NULL,
+    update_date DATETIME,
+    update_member_id VARCHAR(30),
+    notes LONGTEXT,                          -- 비고 또는 추가 정보
+    status INT                  -- 상태 (0:진행 중, 1:완료, 2:보류, 3:취소)
+);
+
+ALTER TABLE SalesOpportunity AUTO_INCREMENT = 30001;
+
 CREATE TABLE ContactHistory (
     contact_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     manager_id INT NOT NULL,
+    opportunity_id INT,
     user_id_1 VARCHAR(30) NOT NULL,
     user_id_2 VARCHAR(30),
     user_id_3 VARCHAR(30),
@@ -65,7 +81,10 @@ CREATE TABLE ContactHistory (
     registration_date VARCHAR(20) NOT NULL,
     register_member_id VARCHAR(30) NOT NULL,
     update_date VARCHAR(20),
-    update_member_id VARCHAR(30)
+    update_member_id VARCHAR(30),
+    notes LONGTEXT,
+    step INT NOT NULL,
+    order INT NOT NULL
 );
 
 ALTER TABLE ContactHistory AUTO_INCREMENT = 40001;

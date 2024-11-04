@@ -1,0 +1,92 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.interline.crm.dao.SalesDAO">
+
+    <insert id="registerSales" parameterType="jp.co.interline.crm.domain.SalesOpportunity">
+        INSERT INTO SalesOpportunity
+        (opportunity_name,
+         company_id,
+         notes,
+         status,
+         register_member_id,
+         registration_date)
+        VALUES
+            (#{opportunity_name},
+             #{company_id},
+             #{notes},
+             #{status},
+             #{register_member_id},
+             #{registration_date})
+    </insert>
+
+    <update id="updateSales" parameterType="jp.co.interline.crm.domain.SalesOpportunity">
+        update SalesOpportunity set
+                                 opportunity_name = #{opportunity_name},
+                                 company_id = #{company_id},
+                                 notes = #{notes},
+                                 position = #{position},
+                                 status = #{status},
+                                 close_date = #{close_date},
+                                 update_member_id = #{update_member_id},
+                                 update_date = #{update_date}
+        where
+            opportunity_id = #{opportunity_id}
+    </update>
+
+    <delete id="salesDelete">
+        delete from SalesOpportunity where opportunity_id = #{opportunity_id}
+    </delete>
+
+    <select id="salesList" parameterType="hashmap" resultType="jp.co.interline.crm.domain.SalesOpportunity">
+        SELECT *
+        FROM SalesOpportunity
+        <where>
+            <if test="categorySelect == null or categorySelect == ''">
+                <if test="searchText != null and searchText != ''">
+                    (opportunity_name LIKE CONCAT('%', #{searchText}, '%') OR company_id LIKE CONCAT('%', #{searchText}, '%'))
+                </if>
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="order == 'opportunity_name'">
+                opportunity_name <if test="orderDirection != null and orderDirection == 'DESC'">DESC</if><if test="orderDirection == null or orderDirection == 'ASC'">ASC</if>
+            </when>
+            <when test="order == 'company_id'">
+                company_id <if test="orderDirection != null and orderDirection == 'DESC'">DESC</if><if test="orderDirection == null or orderDirection == 'ASC'">ASC</if>
+            </when>
+            <otherwise>opportunity_name ASC</otherwise>
+        </choose>
+    </select>
+
+    <select id="getTotal" parameterType="hashmap" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM SalesOpportunity
+        <where>
+            <if test="categorySelect != null and categorySelect != ''">
+                <choose>
+                    <when test="categorySelect == 'manager_id'">
+                        opportunity_name LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                    <when test="categorySelect == 'manager_name'">
+                        AND company_id LIKE CONCAT('%', #{searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+            <if test="categorySelect == null or categorySelect == ''">
+                <if test="searchText != null and searchText != ''">
+                    AND (opportunity_name LIKE CONCAT('%', #{searchText}, '%') OR company_id LIKE CONCAT('%', #{searchText}, '%'))
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <select id="salesDetails" resultType="jp.co.interline.crm.domain.SalesOpportunity">
+        SELECT *
+        FROM SalesOpportunity
+        WHERE opportunity_id = #{opportunityId}
+    </select>
+
+
+</mapper>

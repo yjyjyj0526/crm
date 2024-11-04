@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/html">
+<head>
+</head>
+<body>
+<div class="registration-container" id="registrationContainer" th:fragment="registrationForm">
+    <div class="registration-form">
+        <h3>登録フォーム</h3>
+        <form id="registrationForm" enctype="multipart/form-data">
+            <div>
+                <label for="opportunity_name">opportunity_name</label>
+                <input type="text" id="opportunity_name" name="opportunity_name" required class="form-control" />
+            </div>
+            <div>
+                <label for="company_id">company_id</label>
+                <input type="text" id="company_id" name="company_id" required class="form-control" />
+            </div>
+            <div>
+                <label for="notes">notes</label>
+                <textarea id="notes" name="notes" class="form-control"></textarea>
+            </div>
+            <input type="hidden" id="register_member_id" name="register_member_id" th:value="${#authentication.name}" />
+            <button type="submit" class="btn btn-success mt-3">登録</button>
+            <button type="button" class="btn btn-secondary mt-3" id="cancelButton">キャンセル</button>
+        </form>
+    </div>
+</div>
+
+<!-- 登録成功モーダル -->
+<div class="modal fade" id="registrationSuccessModal" tabindex="-1" aria-labelledby="registrationSuccessModalLabel" aria-hidden="true" th:fragment="registrationSuccessModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registrationSuccessModalLabel">登録成功</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ユーザーが正常に登録されました。
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 登録失敗モーダル -->
+<div class="modal fade" id="registrationFailModal" tabindex="-1" aria-labelledby="registrationFailModalLabel" aria-hidden="true" th:fragment="registrationFailModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registrationFailModalLabel">登録失敗</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ユーザー登録中にエラーが発生しました。
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

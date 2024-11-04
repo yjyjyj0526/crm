@@ -8,16 +8,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class ContactHistory {
-    public int contact_id;
-    public int manager_id;
-    public String user_id_1;
-    public String user_id_2;
-    public String user_id_3;
-    public String contact_method;
-    public String contact_date;
-    public String contact_details;
-    public String registration_date;
-    public String register_member_id;
-    public String update_date;
-    public String update_member_id;
+    private int contact_id;
+    private int manager_id;
+    private int opportunity_id;
+    private String user_id_1;
+    private String user_id_2;
+    private String user_id_3;
+    private String contact_method;
+    private String contact_date;
+    private String contact_details;
+    private String registration_date;
+    private String register_member_id;
+    private String update_date;
+    private String update_member_id;
+    private String notes;
+    private int step;
+    private int order;
 }
