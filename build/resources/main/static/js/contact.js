@@ -104,4 +104,48 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.remove('over');
         });
     });
+
+    // 포함된 폼 코드
+    console.log('DOMContentLoaded 이벤트 발생'); // DOMContentLoaded 이벤트 확인
+
+    const registerForm = document.getElementById('registerForm');
+
+    if (!registerForm) {
+        console.error('registerForm 요소를 찾을 수 없습니다.');
+    }
+
+    console.log('registerForm 요소 찾음', registerForm); // 폼 요소 확인 로그
+
+    registerForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        console.log('폼 제출 이벤트 발생'); // 폼 제출 이벤트 로그
+
+        const formData = new FormData(registerForm);
+
+        console.log("Sending data:", Array.from(formData.entries())); // 전송 데이터 로그
+
+        fetch('/contact/register', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+
+                // 모달 닫기 및 폼 초기화
+                const registerModal = document.getElementById('registerModal');
+                const modal = bootstrap.Modal.getInstance(registerModal);
+                modal.hide();
+                document.getElementById('registerForm').reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('콘텍트를 등록하지 못했습니다. 관리자에게 문의해주세요.');
+            });
+    });
 });

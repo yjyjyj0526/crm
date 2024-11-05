@@ -21,7 +21,6 @@ public class ContactHistory {
     private String register_member_id;
     private String update_date;
     private String update_member_id;
-    private String notes;
     private int step;
     private int order;
 }

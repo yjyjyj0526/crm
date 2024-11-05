@@ -78,11 +78,10 @@ CREATE TABLE ContactHistory (
     contact_method VARCHAR(20) NOT NULL,
     contact_date VARCHAR(30) NOT NULL,
     contact_details LONGTEXT NOT NULL,
-    registration_date VARCHAR(20) NOT NULL,
+    registration_date DATETIME NOT NULL,
     register_member_id VARCHAR(30) NOT NULL,
-    update_date VARCHAR(20),
+    update_date DATETIME,
     update_member_id VARCHAR(30),
-    notes LONGTEXT,
     step INT NOT NULL,
     order INT NOT NULL
 );

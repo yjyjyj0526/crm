@@ -8,4 +8,40 @@
         WHERE opportunity_id = #{opportunityId}
         ORDER BY step, `order`
     </select>
+
+    <select id="getMaxOrder" resultType="java.lang.Integer">
+        SELECT COALESCE(MAX(`order`), 0)
+        FROM ContactHistory
+        WHERE opportunity_id = #{opportunity_id}
+            AND step = #{step}
+    </select>
+
+    <insert id="registerContact" parameterType="jp.co.interline.crm.domain.ContactHistory">
+        insert into ContactHistory
+        (opportunity_id,
+         manager_id,
+         user_id_1,
+         user_id_2,
+         user_id_3,
+         contact_method,
+         contact_date,
+         contact_details,
+         register_member_id,
+         registration_date,
+         step,
+         `order`)
+        values
+            (#{opportunity_id},
+             #{manager_id},
+             #{user_id_1},
+             #{user_id_2},
+             #{user_id_3},
+             #{contact_method},
+             #{contact_date},
+             #{contact_details},
+             #{register_member_id},
+             #{registration_date},
+             #{step},
+             #{order})
+    </insert>
 </mapper>
