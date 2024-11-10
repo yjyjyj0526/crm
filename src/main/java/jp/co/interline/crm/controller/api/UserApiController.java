@@ -79,7 +79,8 @@ public class UserApiController {
             @RequestParam(value = "joining_date", required = false) String joiningDate,
             @RequestParam(value = "date_of_birth", required = false)String dateOfBirth,
             @RequestParam("authority") int authority,
-            @RequestParam("register_member_id") String registerMemberId) {
+            @RequestParam("register_member_id") String registerMemberId,
+            @RequestParam("user_name_phonetic") String user_name_phonetic) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -105,6 +106,7 @@ public class UserApiController {
                 user.setRegister_member_id(registerMemberId);
                 user.setRegistration_date(String.valueOf(now));
                 user.setProfile_image_path(image);
+                user.setUser_name_phonetic(user_name_phonetic);
                 service.joinUser(user);
 
                 response.put("success", true);
@@ -225,10 +227,18 @@ public class UserApiController {
 
     // 특정 사용자의 수정 정보를 JSON 형태로 반환
     @GetMapping("/edit/{user_id}")
-    public ResponseEntity<UserList> getUserEditInfo(@PathVariable String user_id) {
+    public ResponseEntity<Map<String, Object>> getUserEditInfo(@PathVariable String user_id) {
         UserList user = service.userDetails(user_id);
         if (user != null) {
-            return ResponseEntity.ok(user);
+            Map<String, Object> response = new HashMap<>();
+            response.put("data", user);
+            try {
+                String base64Image = encodeFileToBase64(user.getProfile_image_path());
+                response.put("profile_image_base64", base64Image);
+            } catch (IOException e) {
+                response.put("profile_image_base64", null);
+            }
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }

@@ -1,3 +1,12 @@
+const previewProfileImage = (event) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+        const output = document.getElementById('profileImagePreview');
+        output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     if (!window.myApp) {
         window.myApp = {};
@@ -136,9 +145,82 @@ document.addEventListener('DOMContentLoaded', () => {
     const registrationForm = document.getElementById('registrationForm');
     if (registrationForm) {
         registrationForm.addEventListener('submit', event => {
+            const part1 = document.getElementById('phone_number_part1').value;
+            const part2 = document.getElementById('phone_number_part2').value;
+            const part3 = document.getElementById('phone_number_part3').value;
+
+            document.getElementById('phone_number').value = `${part1}-${part2}-${part3}`;
+            if (!validateAllInputs()) {
+                event.preventDefault();
+                return;
+            }
+
             event.preventDefault();
             submitRegistrationForm(registrationForm);
         });
+
+        const phoneticInput = document.getElementById('user_name_phonetic');
+        const phoneInputs = document.querySelectorAll('[id^=phone_number_part]');
+        const emailInput = document.getElementById('email');
+        const departmentSelect = document.getElementById('department');
+        const authoritySelect = document.getElementById('authority');
+
+        phoneticInput.addEventListener('blur', () => validateInput(phoneticInput, 'phoneticMessage'));
+        phoneInputs.forEach(input => input.addEventListener('blur', () => validateInput(input, 'phoneNumberMessage')));
+        emailInput.addEventListener('blur', () => validateInput(emailInput, 'emailMessage'));
+        departmentSelect.addEventListener('blur', () => validateSelect(departmentSelect, 'departmentMessage'));
+        authoritySelect.addEventListener('blur', () => validateSelect(authoritySelect, 'authorityMessage'));
+
+        function validateInput(input, messageId) {
+            const messageElement = document.getElementById(messageId);
+            if (!input.checkValidity()) {
+                messageElement.textContent = input.title;
+            } else {
+                messageElement.textContent = '';
+            }
+        }
+
+        function validateSelect(select, messageId) {
+            const messageElement = document.getElementById(messageId);
+            if (select.value === '') {
+                messageElement.textContent = 'このフィールドは必須です。';
+                return false;
+            } else {
+                messageElement.textContent = '';
+                return true;
+            }
+        }
+
+        function validateAllInputs() {
+            let isValid = true;
+
+            if (!phoneticInput.checkValidity()) {
+                validateInput(phoneticInput, 'phoneticMessage');
+                isValid = false;
+            }
+
+            phoneInputs.forEach(input => {
+                if (!input.checkValidity()) {
+                    validateInput(input, 'phoneNumberMessage');
+                    isValid = false;
+                }
+            });
+
+            if (!emailInput.checkValidity()) {
+                validateInput(emailInput, 'emailMessage');
+                isValid = false;
+            }
+
+            if (!validateSelect(departmentSelect, 'departmentMessage')) {
+                isValid = false;
+            }
+
+            if (!validateSelect(authoritySelect, 'authorityMessage')) {
+                isValid = false;
+            }
+
+            return isValid;
+        }
     } else {
         console.error('registrationForm not found');
     }
@@ -146,6 +228,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const editForm = document.getElementById('editForm');
     if (editForm) {
         editForm.addEventListener('submit', event => {
+            const part1 = document.getElementById('edit_phone_number_part1').value;
+            const part2 = document.getElementById('edit_phone_number_part2').value;
+            const part3 = document.getElementById('edit_phone_number_part3').value;
+
+            document.getElementById('edit_phone_number').value = `${part1}-${part2}-${part3}`;
+            if (!validateAllInputs()) {
+                event.preventDefault();
+                return;
+            }
+
             event.preventDefault();
             submitEditForm(editForm);
         });
@@ -175,6 +267,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cancelButton) {
         cancelButton.addEventListener('click', () => {
             hideForm(registrationContainer);
+            registrationForm.reset(); // 폼 초기화
+            document.getElementById('profileImagePreview').src = '/images/default-profile.png'; // 이미지 초기화
         });
     } else {
         console.error('cancelButton not found');
@@ -213,17 +307,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
         users.forEach(user => {
             const row = document.createElement('tr');
+
+            // authority 값을 변환
+            let authorityLabel = '';
+            switch (user.authority.toString()) {
+                case '1':
+                    authorityLabel = '管理者';
+                    break;
+                case '2':
+                    authorityLabel = '部署長';
+                    break;
+                case '3':
+                    authorityLabel = '社員';
+                    break;
+                default:
+                    authorityLabel = '未知';
+            }
+
             row.innerHTML = `
-                <td>${user.user_id}</td>
-                <td>${user.user_name}</td>
-                <td>${user.phone_number}</td>
-                <td>${user.department}</td>
-                <td>${user.authority}</td>
-                <td>
-                    <button class="btn btn-info detailButton" data-id="${user.user_id}">상세</button>
-                    <button class="btn btn-warning editButton" data-id="${user.user_id}">수정</button>
-                </td>
-            `;
+        <td>${user.user_id}</td>
+        <td>${user.user_name}</td>
+        <td>${user.phone_number}</td>
+        <td>${user.department}</td>
+        <td>${authorityLabel}</td>
+        <td>
+            <button class="btn btn-info detailButton" data-id="${user.user_id}">詳細</button>
+            <button class="btn btn-warning editButton" data-id="${user.user_id}">修正</button>
+        </td>
+    `;
             userTableBody.appendChild(row);
         });
 
@@ -285,21 +396,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function fetchUserEditForm(user_id) {
         fetchData(`/user/edit/${user_id}`)
-            .then(data => {
-                if (data) {
-                    document.getElementById('edit_user_id').value = data.user_id;
-                    document.getElementById('edit_user_name').value = data.user_name;
-                    document.getElementById('edit_phone_number').value = data.phone_number;
-                    document.getElementById('edit_department').value = data.department;
-                    document.getElementById('edit_authority').value = data.authority;
-                    document.getElementById('edit_profile_image').value = '';
-                    hideAllForms(formContainers);
-                    showForm(editContainer);
-                } else {
+            .then(response => {
+                if (!response) {
                     console.error('No data received for user edit form');
+                    return;
                 }
+
+                // 콘솔 로그로 전체 응답을 출력
+                console.log(response);
+
+                const data = response.data; // `data` 키가 맞는지 확인
+                const profileImageBase64 = response.profile_image_base64;
+
+                if (!data) {
+                    console.error('No user data received');
+                    return;
+                }
+
+                const profileImageElement = document.getElementById('edit_profile_image');
+                if (profileImageElement) {
+                    if (profileImageBase64) {
+                        profileImageElement.src = `data:image/png;base64,${profileImageBase64}`;
+                    } else {
+                        profileImageElement.src = '/images/default-profile.png';
+                    }
+                } else {
+                    console.error('Profile image element not found');
+                }
+
+                document.getElementById('edit_user_id').value = data.user_id || '';
+                document.getElementById('edit_user_name').value = data.user_name || '';
+                document.getElementById('edit_user_name_phonetic').value = data.user_name_phonetic || '';
+
+                // 콘솔 로그로 특정 데이터 출력
+                console.log("User Name Phonetic: ", data.user_name_phonetic);
+
+                // 전화번호 처리
+                const phoneNumberParts = data.phone_number ? data.phone_number.split('-') : ['', '', ''];
+                document.getElementById('edit_phone_number_part1').value = phoneNumberParts[0] || '';
+                document.getElementById('edit_phone_number_part2').value = phoneNumberParts[1] || '';
+                document.getElementById('edit_phone_number_part3').value = phoneNumberParts[2] || '';
+
+                document.getElementById('edit_department').value = data.department || '';
+                document.getElementById('edit_authority').value = data.authority || '';
+
+                // Convert date strings to yyyy-MM-dd format before setting values
+                document.getElementById('edit_joining_date').value = data.joining_date ? formatDate(data.joining_date) : '';
+                document.getElementById('edit_date_of_birth').value = data.date_of_birth ? formatDate(data.date_of_birth) : '';
+
+                hideAllForms(formContainers);
+                showForm(editContainer);
             })
             .catch(error => console.error('Error fetching user edit form:', error));
+    }
+
+    // Helper function to format date as yyyy-MM-dd
+    function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
     }
 
     function fillDetailForm(data) {
@@ -362,6 +519,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (registrationSuccessModal) {
                         registrationSuccessModal.show();
                     }
+                    registrationForm.reset(); // 폼 초기화
+                    document.getElementById('profileImagePreview').src = '/images/default-profile.png'; // 이미지 초기화
                 } else {
                     if (registrationFailModal) {
                         registrationFailModal.show();

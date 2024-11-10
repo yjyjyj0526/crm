@@ -40,23 +40,31 @@ body {
     transition: padding-right 0.3s ease-in-out; /* 애니메이션 */
 }
 
+h2.text-center {
+    margin-bottom: 3rem;
+}
+
 .search-and-register {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px; /* 테이블과의 간격 조정 */
 }
 
-.search-and-register > *,
-#searchForm,
-#registerButton {
-    margin-bottom: 0 !important; /* 테이블과의 간격 최소화 강제 */
+/*.search-and-register > *,*/
+/*#searchForm,*/
+/*#registerButton {*/
+/*    margin-bottom: 0 !important; !* 테이블과의 간격 최소화 강제 *!*/
+/*}*/
+
+#searchText, #categorySelect, #registerButton {
+    height: calc(2.25rem + 2px); /* Bootstrap 기본 입력 높이와 동일하게 설정 */
+    vertical-align: middle; /* 세로 정렬 */
 }
 
 table {
     width: 100%;
     table-layout: fixed; /* 모든 셀이 동일한 너비를 가짐 */
-    margin-bottom: 20px; /* 검색폼 및 버튼과의 간격 조정 */
+    margin-bottom: 0px; /* 검색폼 및 버튼과의 간격 조정 */
 }
 
 thead th {
@@ -93,6 +101,37 @@ tbody td {
     width: 450px;
 }
 
+.registration-form h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-image-preview {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 150px;
+    height: 187.5px;
+    object-fit: cover;
+    border: 2px solid #4A4A4AFF;
+    border-radius: 20px;
+    display: block;
+    margin: 10px auto;
+}
+
+.profile-image-preview:hover {
+    opacity: 0.7;
+    border: 2px solid #007bff;
+}
+
+.btn-container {
+    text-align: center;
+    gap: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
 .content.shrink .content-wrapper {
     padding-right: 450px; /* 등록 폼이 보일 때 콘텐츠 영역 축소 */
 }
@@ -120,4 +159,21 @@ tbody td {
     background-color: #007bff;
     color: white;
     border-color: #007bff;
+}
+
+.flex-container {
+    display: flex;
+    width: 100%;
+    gap: 5px;
+}
+
+.flex-container .form-control {
+    flex: 1 1 auto;
+    max-width: 33%; /* 각 입력 필드가 동일한 너비를 갖도록 설정 */
+}
+
+.validation-message {
+    color: red;
+    font-size: 0.9em;
+    margin-left: 10px;
 }

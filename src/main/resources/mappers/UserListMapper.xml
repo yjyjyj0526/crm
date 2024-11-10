@@ -27,7 +27,8 @@
          authority,
          register_member_id,
          registration_date,
-         profile_image_path)
+         profile_image_path,
+         user_name_phonetic)
         values
             (#{user_id},
              #{user_name},
@@ -40,7 +41,8 @@
              #{authority},
              #{register_member_id},
              #{registration_date},
-             #{profile_image_path})
+             #{profile_image_path},
+             #{user_name_phonetic})
     </insert>
 
     <select id="findUserID" resultType="String" parameterType="String">
@@ -58,7 +60,8 @@
             authority = #{authority},
             update_member_id = #{update_member_id},
             update_date = #{update_date},
-            profile_image_path = #{profile_image_path}
+            profile_image_path = #{profile_image_path},
+            user_name_phonetic = #{user_name_phonetic}
         where
             user_id = #{user_id}
     </update>
@@ -129,7 +132,7 @@
     </select>
 
     <select id="userDetails" resultType="jp.co.interline.crm.domain.UserList">
-        select * from UserList where authority IN (1,2) and user_id = #{user_id} and enabled = 1
+        select * from UserList where authority IN (1,2,3) and user_id = #{user_id} and enabled = 1
     </select>
 
     <delete id="userDelete">

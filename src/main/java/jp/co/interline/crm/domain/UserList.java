@@ -23,4 +23,5 @@ public class UserList {
     private String update_member_id;
     private int enabled;
     private String profile_image_path;
+    private String user_name_phonetic;
 }
