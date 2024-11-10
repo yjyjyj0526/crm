@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const part3 = document.getElementById('edit_phone_number_part3').value;
 
             document.getElementById('edit_phone_number').value = `${part1}-${part2}-${part3}`;
-            if (!validateAllInputs()) {
+            if (!edit_validateAllInputs()) {
                 event.preventDefault();
                 return;
             }
@@ -241,6 +241,69 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             submitEditForm(editForm);
         });
+
+        const edit_phoneticInput = document.getElementById('edit_user_name_phonetic');
+        const edit_phoneInputs = document.querySelectorAll('[id^=phone_number_part]');
+        const edit_emailInput = document.getElementById('edit_email');
+        const edit_departmentSelect = document.getElementById('edit_department');
+        const edit_authoritySelect = document.getElementById('edit_authority');
+
+        edit_phoneticInput.addEventListener('blur', () => edit_validateInput(edit_phoneticInput, 'edit_phoneticMessage'));
+        edit_phoneInputs.forEach(input => input.addEventListener('blur', () => edit_validateInput(input, 'phoneNumberMessage')));
+        edit_emailInput.addEventListener('blur', () => edit_validateInput(edit_emailInput, 'edit_emailMessage'));
+        edit_departmentSelect.addEventListener('blur', () => edit_validateSelect(edit_departmentSelect, 'edit_departmentMessage'));
+        edit_authoritySelect.addEventListener('blur', () => edit_validateSelect(edit_authoritySelect, 'edit_authorityMessage'));
+
+        function edit_validateInput(input, messageId) {
+            const messageElement = document.getElementById(messageId);
+            if (!input.checkValidity()) {
+                messageElement.textContent = input.title;
+            } else {
+                messageElement.textContent = '';
+            }
+        }
+
+        function edit_validateSelect(select, messageId) {
+            const messageElement = document.getElementById(messageId);
+            if (select.value === '') {
+                messageElement.textContent = 'このフィールドは必須です。';
+                return false;
+            } else {
+                messageElement.textContent = '';
+                return true;
+            }
+        }
+
+        function edit_validateAllInputs() {
+            let isValid = true;
+
+            if (!edit_phoneticInput.checkValidity()) {
+                validateInput(phoneticInput, 'edit_phoneticMessage');
+                isValid = false;
+            }
+
+            edit_phoneInputs.forEach(input => {
+                if (!input.checkValidity()) {
+                    validateInput(input, 'edit_phoneNumberMessage');
+                    isValid = false;
+                }
+            });
+
+            if (!edit_emailInput.checkValidity()) {
+                validateInput(edit_emailInput, 'edit_emailMessage');
+                isValid = false;
+            }
+
+            if (!validateSelect(edit_departmentSelect, 'edit_departmentMessage')) {
+                isValid = false;
+            }
+
+            if (!validateSelect(edit_authoritySelect, 'edit_authorityMessage')) {
+                isValid = false;
+            }
+
+            return isValid;
+        }
     } else {
         console.error('editForm not found');
     }

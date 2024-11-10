@@ -22,7 +22,7 @@
                 <input type="text" id="edit_user_name" name="user_name" required class="form-control" />
             </div>
             <div class="form-group">
-                <label for="edit_user_name_phonetic">フリガナ <span class="validation-message" id="phoneticMessage"></span></label>
+                <label for="edit_user_name_phonetic">フリガナ <span class="validation-message" id="edit_phoneticMessage"></span></label>
                 <input type="text" id="edit_user_name_phonetic" name="user_name_phonetic" class="form-control" pattern="[\u30A0-\u30FF]+" title="カタカナのみ入力可能です。" />
             </div>
             <div class="form-group">
@@ -35,7 +35,7 @@
                 <input type="hidden" id="edit_phone_number" name="phone_number" />
             </div>
             <div class="form-group">
-                <label for="edit_department">部署 <span class="validation-message" id="departmentMessage"></span></label>
+                <label for="edit_department">部署 <span class="validation-message" id="edit_departmentMessage"></span></label>
                 <select id="edit_department" name="department" required class="form-control">
                     <option value="">選択してください</option>
                     <option value="HR">人事部</option>
@@ -44,13 +44,17 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="edit_authority">権限 <span class="validation-message" id="authorityMessage"></span></label>
+                <label for="edit_authority">権限 <span class="validation-message" id="edit_authorityMessage"></span></label>
                 <select id="edit_authority" name="authority" required class="form-control">
                     <option value="">選択してください</option>
                     <option value="1">管理者</option>
                     <option value="2">部署長</option>
                     <option value="3">社員</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="edit_email">メールアドレス <span class="validation-message" id="edit_emailMessage"></span></label>
+                <input type="text" id="edit_email" name="email" class="form-control" />
             </div>
             <div class="form-group">
                 <label for="edit_joining_date">入社日</label>
