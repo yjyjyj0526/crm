@@ -77,16 +77,21 @@
         <if test="categorySelect != null and categorySelect != ''">
             <choose>
                 <when test="categorySelect == 'user_id'">
-                    AND user_id LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
+                    AND department LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
                 </when>
                 <when test="categorySelect == 'user_name'">
                     AND user_name LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
+                </when>
+                <when test="categorySelect == 'user_name_phonetic'">
+                    AND user_name_phonetic LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
                 </when>
             </choose>
         </if>
         <if test="categorySelect == null or categorySelect == ''">
             <if test="searchText != null and searchText != ''">
-                AND (user_id LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%') OR user_name LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%'))
+                AND (department LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
+                OR user_name LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
+                OR user_name_phonetic LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%'))
             </if>
         </if>
         ORDER BY
@@ -117,16 +122,21 @@
         <if test="categorySelect != null and categorySelect != ''">
             <choose>
                 <when test="categorySelect == 'user_id'">
-                    AND user_id LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
+                    AND department LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
                 </when>
                 <when test="categorySelect == 'user_name'">
                     AND user_name LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
+                </when>
+                <when test="categorySelect == 'user_name_phonetic'">
+                    AND user_name_phonetic LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
                 </when>
             </choose>
         </if>
         <if test="categorySelect == null or categorySelect == ''">
             <if test="searchText != null and searchText != ''">
-                AND (user_id LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%') OR user_name LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%'))
+                AND (department LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
+                OR user_name LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%')
+                OR user_name_phonetic LIKE CONCAT('%', COALESCE(#{searchText}, ''), '%'))
             </if>
         </if>
     </select>

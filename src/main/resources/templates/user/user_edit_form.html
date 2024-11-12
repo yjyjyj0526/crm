@@ -15,7 +15,7 @@
             </div>
             <div class="form-group">
                 <label for="edit_user_id">ID</label>
-                <input type="text" id="edit_user_id" name="user_id" required class="form-control" />
+                <input type="text" id="edit_user_id" name="user_id" required class="form-control" readonly />
             </div>
             <div class="form-group">
                 <label for="edit_user_name">社員名</label>
@@ -26,7 +26,7 @@
                 <input type="text" id="edit_user_name_phonetic" name="user_name_phonetic" class="form-control" pattern="[\u30A0-\u30FF]+" title="カタカナのみ入力可能です。" />
             </div>
             <div class="form-group">
-                <label for="edit_phone_number_part1">電話番号</label>
+                <label for="edit_phone_number_part1">電話番号 <span class="validation-message" id="edit_phoneNumberMessage"></span></label>
                 <div class="form-inline flex-container">
                     <input type="text" id="edit_phone_number_part1" name="edit_phone_number_part1" maxlength="3" required class="form-control" pattern="\d*" title="数字のみ入力可能です。" />
                     <input type="text" id="edit_phone_number_part2" name="edit_phone_number_part2" maxlength="4" required class="form-control" pattern="\d*" title="数字のみ入力可能です。" />
@@ -38,15 +38,14 @@
                 <label for="edit_department">部署 <span class="validation-message" id="edit_departmentMessage"></span></label>
                 <select id="edit_department" name="department" required class="form-control">
                     <option value="">選択してください</option>
-                    <option value="HR">人事部</option>
-                    <option value="IT">IT部門</option>
-                    <option value="Sales">営業部門</option>
+                    <option value="HR">経営支援部</option>
+                    <option value="IT">SI事業部</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="edit_authority">権限 <span class="validation-message" id="edit_authorityMessage"></span></label>
                 <select id="edit_authority" name="authority" required class="form-control">
-                    <option value="">選択してください</option>
+                    <option value="" disabled>選択してください</option>
                     <option value="1">管理者</option>
                     <option value="2">部署長</option>
                     <option value="3">社員</option>
@@ -65,8 +64,10 @@
                 <input type="date" id="edit_date_of_birth" name="date_of_birth" class="form-control" />
             </div>
             <input type="hidden" id="update_member_id" name="update_member_id" th:value="${#authentication.name}" />
-            <button type="submit" class="btn btn-success mt-3">修正</button>
-            <button type="button" class="btn btn-secondary mt-3" id="editCancelButton">とじる</button>
+            <div class="btn-container">
+                <button type="submit" class="btn btn-success mt-3" id="submitEditButton">修正</button>
+                <button type="button" class="btn btn-secondary mt-3" id="editCancelButton">とじる</button>
+            </div>
         </form>
     </div>
 </div>

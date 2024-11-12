@@ -33,6 +33,39 @@ public class UserApiController {
     @Autowired
     UserService service;
 
+    private String convertHiraganaToKatakana(String hiragana) {
+        StringBuilder katakana = new StringBuilder();
+        for (int i = 0; i < hiragana.length(); i++) {
+            char ch = hiragana.charAt(i);
+            if (ch >= '\u3041' && ch <= '\u3096') {
+                katakana.append((char) (ch + 0x60));
+            } else {
+                katakana.append(ch);
+            }
+        }
+        return katakana.toString();
+    }
+
+    private String determineCategory(String searchText) {
+        if (searchText == null || searchText.isEmpty()) {
+            return null;
+        }
+
+        String hiraganaRegex = "[\u3040-\u309F]+";
+        String katakanaRegex = "[\u30A0-\u30FF]+";
+        String kanjiRegex = "[\u4E00-\u9FFF]+";
+
+        if (searchText.matches(hiraganaRegex)) {
+            return "user_name_phonetic";
+        } else if (searchText.matches(katakanaRegex)) {
+            return "user_name_phonetic";
+        } else if (searchText.matches(kanjiRegex)) {
+            return "user_name";
+        } else {
+            return "user_name";
+        }
+    }
+
     //ファイルセーブ
     private String saveFile(MultipartFile file) {
         if (file != null && !file.isEmpty()) {
@@ -175,7 +208,6 @@ public class UserApiController {
     @GetMapping("/list/json")
     public ResponseEntity<Map<String, Object>> getUserListJson(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(name = "categorySelect", required = false) String categorySelect,
             @RequestParam(name = "searchText", required = false) String searchText,
             @RequestParam(name = "order", required = false) String order,
             @RequestParam(name = "orderDirection", required = false, defaultValue = "ASC") String orderDirection,
@@ -183,8 +215,10 @@ public class UserApiController {
 
         int pagePerGroup = 5;
 
-        if (searchText == null || searchText.isEmpty()) {
-            searchText = null;
+        String categorySelect = determineCategory(searchText);
+
+        if ("user_name_phonetic".equals(categorySelect) && searchText != null) {
+            searchText = convertHiraganaToKatakana(searchText);
         }
 
         PagenationUtil navi = service.getPageNavigator(pagePerGroup, countPerPage, page, categorySelect, searchText);

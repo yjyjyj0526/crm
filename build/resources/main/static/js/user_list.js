@@ -1,4 +1,4 @@
-const previewProfileImage = (event) => {
+const previewProfileImage2 = (event) => {
     const reader = new FileReader();
     reader.onload = () => {
         const output = document.getElementById('profileImagePreview');
@@ -6,6 +6,26 @@ const previewProfileImage = (event) => {
     };
     reader.readAsDataURL(event.target.files[0]);
 };
+
+function previewProfileImage(event) {
+    const input = event.target;
+    const file = input.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const previewElement = document.getElementById('edit_profile_image');
+            if (previewElement) {
+                previewElement.src = e.target.result;
+            } else {
+                console.error('Profile image preview element not found');
+            }
+        };
+
+        reader.readAsDataURL(file);
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     if (!window.myApp) {
@@ -65,6 +85,13 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    const editProfileImageInput = document.getElementById('edit_profile_image_input');
+
+    if (editProfileImageInput) {
+        editProfileImageInput.addEventListener('change', previewProfileImage);
+    } else {
+        console.error('edit_profile_image_input not found');
+    }
     const { showForm, hideForm, hideAllForms, fetchData, postData } = window.myApp;
 
     const registerButton = document.getElementById('registerButton');
@@ -142,34 +169,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const registrationForm = document.getElementById('registrationForm');
-    if (registrationForm) {
-        registrationForm.addEventListener('submit', event => {
-            const part1 = document.getElementById('phone_number_part1').value;
-            const part2 = document.getElementById('phone_number_part2').value;
-            const part3 = document.getElementById('phone_number_part3').value;
+    const initializeForm = (formId, prefix) => {
+        const form = document.getElementById(formId);
+        if (!form) {
+            console.error(`${formId} not found`);
+            return;
+        }
 
-            document.getElementById('phone_number').value = `${part1}-${part2}-${part3}`;
+        const phoneticInput = document.getElementById(`${prefix}user_name_phonetic`);
+        const phoneInputs = document.querySelectorAll(`[id^=${prefix}phone_number_part]`);
+        const emailInput = document.getElementById(`${prefix}email`);
+        const departmentSelect = document.getElementById(`${prefix}department`);
+        const authoritySelect = document.getElementById(`${prefix}authority`);
+
+        form.addEventListener('submit', event => {
+            const part1 = document.getElementById(`${prefix}phone_number_part1`).value;
+            const part2 = document.getElementById(`${prefix}phone_number_part2`).value;
+            const part3 = document.getElementById(`${prefix}phone_number_part3`).value;
+
+            document.getElementById(`${prefix}phone_number`).value = `${part1}-${part2}-${part3}`;
             if (!validateAllInputs()) {
                 event.preventDefault();
                 return;
             }
 
             event.preventDefault();
-            submitRegistrationForm(registrationForm);
+            if (prefix === "edit_") {
+                submitEditForm(form);
+            } else {
+                submitRegistrationForm(form);
+            }
         });
 
-        const phoneticInput = document.getElementById('user_name_phonetic');
-        const phoneInputs = document.querySelectorAll('[id^=phone_number_part]');
-        const emailInput = document.getElementById('email');
-        const departmentSelect = document.getElementById('department');
-        const authoritySelect = document.getElementById('authority');
-
-        phoneticInput.addEventListener('blur', () => validateInput(phoneticInput, 'phoneticMessage'));
-        phoneInputs.forEach(input => input.addEventListener('blur', () => validateInput(input, 'phoneNumberMessage')));
-        emailInput.addEventListener('blur', () => validateInput(emailInput, 'emailMessage'));
-        departmentSelect.addEventListener('blur', () => validateSelect(departmentSelect, 'departmentMessage'));
-        authoritySelect.addEventListener('blur', () => validateSelect(authoritySelect, 'authorityMessage'));
+        phoneticInput.addEventListener('blur', () => validateInput(phoneticInput, `${prefix}phoneticMessage`));
+        phoneInputs.forEach(input => input.addEventListener('blur', () => validateInput(input, `${prefix}phoneNumberMessage`)));
+        emailInput.addEventListener('blur', () => validateInput(emailInput, `${prefix}emailMessage`));
+        departmentSelect.addEventListener('blur', () => validateSelect(departmentSelect, `${prefix}departmentMessage`));
+        authoritySelect.addEventListener('blur', () => validateSelect(authoritySelect, `${prefix}authorityMessage`));
 
         function validateInput(input, messageId) {
             const messageElement = document.getElementById(messageId);
@@ -195,118 +231,36 @@ document.addEventListener('DOMContentLoaded', () => {
             let isValid = true;
 
             if (!phoneticInput.checkValidity()) {
-                validateInput(phoneticInput, 'phoneticMessage');
+                validateInput(phoneticInput, `${prefix}phoneticMessage`);
                 isValid = false;
             }
 
             phoneInputs.forEach(input => {
                 if (!input.checkValidity()) {
-                    validateInput(input, 'phoneNumberMessage');
+                    validateInput(input, `${prefix}phoneNumberMessage`);
                     isValid = false;
                 }
             });
 
             if (!emailInput.checkValidity()) {
-                validateInput(emailInput, 'emailMessage');
+                validateInput(emailInput, `${prefix}emailMessage`);
                 isValid = false;
             }
 
-            if (!validateSelect(departmentSelect, 'departmentMessage')) {
+            if (!validateSelect(departmentSelect, `${prefix}departmentMessage`)) {
                 isValid = false;
             }
 
-            if (!validateSelect(authoritySelect, 'authorityMessage')) {
-                isValid = false;
-            }
-
-            return isValid;
-        }
-    } else {
-        console.error('registrationForm not found');
-    }
-
-    const editForm = document.getElementById('editForm');
-    if (editForm) {
-        editForm.addEventListener('submit', event => {
-            const part1 = document.getElementById('edit_phone_number_part1').value;
-            const part2 = document.getElementById('edit_phone_number_part2').value;
-            const part3 = document.getElementById('edit_phone_number_part3').value;
-
-            document.getElementById('edit_phone_number').value = `${part1}-${part2}-${part3}`;
-            if (!edit_validateAllInputs()) {
-                event.preventDefault();
-                return;
-            }
-
-            event.preventDefault();
-            submitEditForm(editForm);
-        });
-
-        const edit_phoneticInput = document.getElementById('edit_user_name_phonetic');
-        const edit_phoneInputs = document.querySelectorAll('[id^=phone_number_part]');
-        const edit_emailInput = document.getElementById('edit_email');
-        const edit_departmentSelect = document.getElementById('edit_department');
-        const edit_authoritySelect = document.getElementById('edit_authority');
-
-        edit_phoneticInput.addEventListener('blur', () => edit_validateInput(edit_phoneticInput, 'edit_phoneticMessage'));
-        edit_phoneInputs.forEach(input => input.addEventListener('blur', () => edit_validateInput(input, 'phoneNumberMessage')));
-        edit_emailInput.addEventListener('blur', () => edit_validateInput(edit_emailInput, 'edit_emailMessage'));
-        edit_departmentSelect.addEventListener('blur', () => edit_validateSelect(edit_departmentSelect, 'edit_departmentMessage'));
-        edit_authoritySelect.addEventListener('blur', () => edit_validateSelect(edit_authoritySelect, 'edit_authorityMessage'));
-
-        function edit_validateInput(input, messageId) {
-            const messageElement = document.getElementById(messageId);
-            if (!input.checkValidity()) {
-                messageElement.textContent = input.title;
-            } else {
-                messageElement.textContent = '';
-            }
-        }
-
-        function edit_validateSelect(select, messageId) {
-            const messageElement = document.getElementById(messageId);
-            if (select.value === '') {
-                messageElement.textContent = 'このフィールドは必須です。';
-                return false;
-            } else {
-                messageElement.textContent = '';
-                return true;
-            }
-        }
-
-        function edit_validateAllInputs() {
-            let isValid = true;
-
-            if (!edit_phoneticInput.checkValidity()) {
-                validateInput(phoneticInput, 'edit_phoneticMessage');
-                isValid = false;
-            }
-
-            edit_phoneInputs.forEach(input => {
-                if (!input.checkValidity()) {
-                    validateInput(input, 'edit_phoneNumberMessage');
-                    isValid = false;
-                }
-            });
-
-            if (!edit_emailInput.checkValidity()) {
-                validateInput(edit_emailInput, 'edit_emailMessage');
-                isValid = false;
-            }
-
-            if (!validateSelect(edit_departmentSelect, 'edit_departmentMessage')) {
-                isValid = false;
-            }
-
-            if (!validateSelect(edit_authoritySelect, 'edit_authorityMessage')) {
+            if (!validateSelect(authoritySelect, `${prefix}authorityMessage`)) {
                 isValid = false;
             }
 
             return isValid;
         }
-    } else {
-        console.error('editForm not found');
-    }
+    };
+
+    initializeForm('registrationForm', '');
+    initializeForm('editForm', 'edit_');
 
     const editCancelButton = document.getElementById('editCancelButton');
     if (editCancelButton) {
@@ -490,7 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('edit_user_id').value = data.user_id || '';
                 document.getElementById('edit_user_name').value = data.user_name || '';
                 document.getElementById('edit_user_name_phonetic').value = data.user_name_phonetic || '';
-
+                document.getElementById('edit_email').value = data.email || '';
                 // 콘솔 로그로 특정 데이터 출력
                 console.log("User Name Phonetic: ", data.user_name_phonetic);
 

@@ -17,22 +17,22 @@
 <div th:replace="layout :: header" class="header"></div>
 <main class="content" id="contentMain">
   <div class="content-wrapper">
-    <h2 class="text-center">사용자 리스트</h2>
+    <h2 class="text-center">社員管理</h2>
     <div class="d-flex justify-content-between mb-1">
       <form id="searchForm" method="get" class="d-flex align-items-center">
         <div class="form-group me-2 mb-0 d-flex align-items-center">
           <select name="categorySelect" id="categorySelect" class="form-select me-2">
-            <option value="user_id">UserID</option>
-            <option value="user_name">UserName</option>
+            <option value="user_name">社員名</option>
+            <option value="department">部署</option>
           </select>
         </div>
         <div class="form-group me-2 mb-0 d-flex align-items-center">
-          <input type="text" id="searchText" name="searchText" class="form-control me-2" placeholder="검색 텍스트를 입력하세요">
+          <input type="text" id="searchText" name="searchText" class="form-control me-2" placeholder="検索登録テキスト入力">
           <input type="hidden" id="view" name="view">
         </div>
-        <button type="submit" class="btn btn-primary">검색</button>
+        <button type="submit" class="btn btn-primary">検索</button>
       </form>
-      <button class="btn btn-primary" id="registerButton">등록</button>
+      <button class="btn btn-primary" id="registerButton">登録</button>
     </div>
     <div id="loadingSpinner" style="display:none;">
       <div class="spinner-border text-primary" role="status">
@@ -43,37 +43,37 @@
       <table class="table table-bordered table-hover mt-3" id="userTable">
         <thead class="table-dark">
         <tr>
-          <th class="sortable" data-order="user_id">직원 ID
+          <th class="sortable" data-order="user_id">ID
             <span class="sort-icons">
               <b class="icon-asc">⇑</b>
               <b class="icon-desc">⇓</b>
             </span>
           </th>
-          <th class="sortable" data-order="user_name">직원명
+          <th class="sortable" data-order="user_name">社員名
             <span class="sort-icons">
               <b class="icon-asc">⇑</b>
               <b class="icon-desc">⇓</b>
             </span>
           </th>
-          <th class="sortable" data-order="phone_number">전화번호
+          <th class="sortable" data-order="phone_number">電話番号
             <span class="sort-icons">
               <b class="icon-asc">⇑</b>
               <b class="icon-desc">⇓</b>
             </span>
           </th>
-          <th class="sortable" data-order="department">부서
+          <th class="sortable" data-order="department">部署
             <span class="sort-icons">
               <b class="icon-asc">⇑</b>
               <b class="icon-desc">⇓</b>
             </span>
           </th>
-          <th class="sortable" data-order="authority">권한
+          <th class="sortable" data-order="authority">権限
             <span class="sort-icons">
               <b class="icon-asc">⇑</b>
               <b class="icon-desc">⇓</b>
             </span>
           </th>
-          <th>조작</th>
+          <th>操作</th>
         </tr>
         </thead>
         <tbody id="userTableBody"></tbody>
