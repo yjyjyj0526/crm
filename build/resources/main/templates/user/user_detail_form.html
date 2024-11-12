@@ -5,34 +5,49 @@
 <body>
 <div class="registration-container" id="detailContainer" th:fragment="detailForm">
     <div class="registration-form">
-        <h3>상세 정보</h3>
+        <h3>社員情報</h3>
         <form id="detailForm">
             <div class="form-group text-center">
-                <img id="detail_profile_image" src="/images/default-profile.png" alt="프로필 이미지" style="width: 150px; height: 150px;">
+                <img id="detail_profile_image" class="profile-image-preview" src="/images/default-profile.png" alt="프로필 이미지">
             </div>
             <div class="form-group">
-                <label for="detail_user_id">직원 ID</label>
+                <label for="detail_user_id">ID</label>
                 <input type="text" id="detail_user_id" name="user_id" required class="form-control" disabled />
             </div>
             <div class="form-group">
-                <label for="detail_user_name">직원명</label>
+                <label for="detail_user_name">社員名</label>
                 <input type="text" id="detail_user_name" name="user_name" required class="form-control" disabled />
             </div>
             <div class="form-group">
-                <label for="detail_phone_number">전화번호</label>
+                <label for="detail_user_name_phonetic">フリガナ</label>
+                <input type="text" id="detail_user_name_phonetic" name="user_name" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_phone_number">電話番号</label>
                 <input type="text" id="detail_phone_number" name="phone_number" required class="form-control" disabled />
             </div>
             <div class="form-group">
-                <label for="detail_department">부서</label>
-                <input type="text" id="detail_department" name="department" required class="form-control" disabled />
+                <label for="detail_department">部署</label>
+                <span id="detail_department" class="form-control-span"></span>
             </div>
             <div class="form-group">
-                <label for="detail_authority">권한</label>
-                <input type="number" id="detail_authority" name="authority" required class="form-control" disabled />
+                <label for="detail_authority">権限</label>
+                <span id="detail_authority" class="form-control-span"></span>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-secondary" id="detailCancelButton">닫기</button>
-                <button type="button" class="btn btn-primary editButton" id="detailEditButton" data-id="2222">수정</button>
+                <label for="detail_email">メールアドレス</label>
+                <input type="email" id="detail_email" name="authority" required class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_joining_date">入社日</label>
+                <input type="date" id="detail_joining_date" name="joining_date" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label for="detail_date_of_birth">生年月日</label>
+                <input type="date" id="detail_date_of_birth" name="date_of_birth" class="form-control" disabled />
+            </div>
+            <div class="btn-container">
+                <button type="button" class="btn btn-secondary" id="detailCancelButton">閉じる</button>
             </div>
         </form>
     </div>

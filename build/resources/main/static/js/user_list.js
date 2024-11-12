@@ -485,11 +485,51 @@ document.addEventListener('DOMContentLoaded', () => {
         const user = data.user;
         document.getElementById('detail_user_id').value = user.user_id;
         document.getElementById('detail_user_name').value = user.user_name;
+        document.getElementById('detail_user_name_phonetic').value = user.user_name_phonetic;
         document.getElementById('detail_phone_number').value = user.phone_number;
-        document.getElementById('detail_department').value = user.department;
-        document.getElementById('detail_authority').value = user.authority;
-        document.getElementById('detail_profile_image').value = user.profile_image;
 
+        // Department 변환
+        let departmentText = '';
+        switch (user.department) {
+            case 'HR':
+                departmentText = '経営支援部';
+                break;
+            case 'IT':
+                departmentText = 'SI事業部';
+                break;
+            default:
+                departmentText = user.department; // 기본값으로 원래 값을 사용
+                break;
+        }
+        document.getElementById('detail_department').innerText = departmentText;
+
+        // Authority 변환
+        let authorityText = '';
+        console.log('Authority Value:', user.authority); // 디버깅용 콘솔 출력
+        switch (user.authority) {
+            case '1':
+            case 1:
+                authorityText = '管理者';
+                break;
+            case '2':
+            case 2:
+                authorityText = '部署長';
+                break;
+            case '3':
+            case 3:
+                authorityText = '社員';
+                break;
+            default:
+                authorityText = user.authority; // 기본값으로 원래 값을 사용
+                break;
+        }
+        document.getElementById('detail_authority').innerText = authorityText;
+
+        document.getElementById('detail_email').value = user.email;
+        document.getElementById('detail_joining_date').value = user.joining_date;
+        document.getElementById('detail_date_of_birth').value = user.date_of_birth;
+
+        // 프로필 이미지 설정
         const profileImageElement = document.getElementById('detail_profile_image');
         if (data.profile_image_base64) {
             profileImageElement.src = `data:image/png;base64,${data.profile_image_base64}`;
@@ -598,4 +638,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error submitting edit form:', error);
             });
     }
+
+    $('#confirmResetPasswordButton').click(function() {
+        // 여기서 비밀번호 초기화 로직을 구현하세요.
+        // 예: Ajax 호출을 통해 서버에서 비밀번호 초기화 수행.
+        console.log("비밀번호 초기화 로직 실행");
+
+        // 모달 닫기
+        $('#resetPasswordModal').modal('hide');
+
+        // 성공 모달 표시 (성공했을 경우에)
+        $('#editSuccessModal').modal('show');
+    });
 });

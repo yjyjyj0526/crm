@@ -7,7 +7,10 @@
 <body>
 <div class="registration-container" id="editContainer" th:fragment="editForm">
     <div class="registration-form">
-        <h3>社員修正</h3>
+        <div class="header-container">
+            <h3>社員修正</h3>
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#resetPasswordModal">パスワード初期化</button>
+        </div>
         <form id="editForm" enctype="multipart/form-data">
             <div class="form-group text-center">
                 <input type="file" id="edit_profile_image_input" name="profile_image" class="form-control-file" accept="image/*" style="display:none;" onchange="previewProfileImage(event)" />
@@ -66,7 +69,7 @@
             <input type="hidden" id="update_member_id" name="update_member_id" th:value="${#authentication.name}" />
             <div class="btn-container">
                 <button type="submit" class="btn btn-success mt-3" id="submitEditButton">修正</button>
-                <button type="button" class="btn btn-secondary mt-3" id="editCancelButton">とじる</button>
+                <button type="button" class="btn btn-secondary mt-3" id="editCancelButton">閉じる</button>
             </div>
         </form>
     </div>
@@ -77,14 +80,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editSuccessModalLabel">수정 성공</h5>
+                <h5 class="modal-title" id="editSuccessModalLabel">登録成功</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                사용자가 성공적으로 수정되었습니다.
+                社員情報が正常に修正されました。
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
             </div>
         </div>
     </div>
@@ -95,14 +98,33 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editFailModalLabel">수정 실패</h5>
+                <h5 class="modal-title" id="editFailModalLabel">登録失敗</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                사용자 수정 중 오류가 발생했습니다.
+                社員情報修正中にエラーが発生しました。
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 비밀번호 초기화 모달 -->
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resetPasswordModalLabel">비밀번호 초기화</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                정말로 비밀번호를 초기화하시겠습니까?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-danger" id="confirmResetPasswordButton">초기화</button>
             </div>
         </div>
     </div>
