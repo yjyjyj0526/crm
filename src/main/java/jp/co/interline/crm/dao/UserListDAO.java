@@ -19,4 +19,5 @@ public interface UserListDAO {
     int getTotal (HashMap<String, String> map);
     UserList userDetails(String user_id);
     void userDelete(String user_id);
+    int resetPassword(UserList user);
 }

@@ -77,4 +77,10 @@ public class UserService {
     public void userDelete(String user_id) {
         dao.userDelete(user_id);
     }
+
+    public int resetPassword(UserList user) {
+        String pw = passwordEncoder.encode("1234");
+        user.setPassword(pw);
+        return dao.resetPassword(user);
+    }
 }

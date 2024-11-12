@@ -148,4 +148,8 @@
     <delete id="userDelete">
         delete from UserList where user_id = #{user_id}
     </delete>
+
+    <update id="resetPassword" parameterType="jp.co.interline.crm.domain.UserList">
+        update UserList set password = #{password} where user_id = #{user_id}
+    </update>
 </mapper>

@@ -284,4 +284,13 @@ public class UserApiController {
         service.userDelete(user_id);
         return "";
     }
+
+    @PostMapping("/resetPassword")
+    public String resetPassword(@RequestParam String user_id) {
+        UserList user = new UserList();
+        user.setUser_id(user_id);
+
+        service.resetPassword(user);
+        return "Password reset link has been sent to your registered email.";
+    }
 }

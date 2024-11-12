@@ -639,15 +639,49 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    $('#confirmResetPasswordButton').click(function() {
-        // 여기서 비밀번호 초기화 로직을 구현하세요.
-        // 예: Ajax 호출을 통해 서버에서 비밀번호 초기화 수행.
-        console.log("비밀번호 초기화 로직 실행");
+    const resetPasswordButton = document.getElementById('confirmResetPasswordButton');
 
-        // 모달 닫기
-        $('#resetPasswordModal').modal('hide');
+    if (resetPasswordButton) {
+        resetPasswordButton.addEventListener('click', async function () {
+            try {
+                console.log("비밀번호 초기화 로직 실행");
 
-        // 성공 모달 표시 (성공했을 경우에)
-        $('#editSuccessModal').modal('show');
-    });
+                // 서버에 비밀번호 초기화 요청 보내기
+                const response = await fetch('/user/resetPassword', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    // 필요한 경우, 요청 본문을 추가
+                    body: JSON.stringify({
+                        userId: '<USER_ID>', // 사용자 ID 등 필요한 데이터를 추가하세요.
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('비밀번호 초기화 실패');
+                }
+
+                const result = await response.json();
+
+                // 비밀번호 초기화 성공 여부에 따라 모달 표시
+                if (result.success) {
+                    // 모달 닫기
+                    $('#resetPasswordModal').modal('hide');
+
+                    // 성공 모달 표시
+                    $('#editSuccessModal').modal('show');
+                } else {
+                    throw new Error(result.message || '비밀번호 초기화 실패');
+                }
+            } catch (error) {
+                console.error('Error resetting password:', error);
+
+                // 실패 모달 표시
+                $('#editFailModal').modal('show');
+            }
+        });
+    } else {
+        console.error('confirmResetPasswordButton not found');
+    }
 });
