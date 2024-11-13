@@ -286,11 +286,16 @@ public class UserApiController {
     }
 
     @PostMapping("/resetPassword")
-    public String resetPassword(@RequestParam String user_id) {
+    public ResponseEntity<Map<String, Object>> resetPassword(@RequestParam String user_id) {
         UserList user = new UserList();
         user.setUser_id(user_id);
 
         service.resetPassword(user);
-        return "Password reset link has been sent to your registered email.";
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "パスワード初期化成功");
+
+        return ResponseEntity.ok(response);
     }
 }

@@ -441,6 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Profile image element not found');
                 }
 
+                document.getElementById('user_id_for_reset').value = data.user_id || '';
                 document.getElementById('edit_user_id').value = data.user_id || '';
                 document.getElementById('edit_user_name').value = data.user_name || '';
                 document.getElementById('edit_user_name_phonetic').value = data.user_name_phonetic || '';
@@ -644,17 +645,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (resetPasswordButton) {
         resetPasswordButton.addEventListener('click', async function () {
             try {
+                const userId = document.getElementById('user_id_for_reset').value;
+
                 console.log("비밀번호 초기화 로직 실행");
 
                 // 서버에 비밀번호 초기화 요청 보내기
                 const response = await fetch('/user/resetPassword', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     // 필요한 경우, 요청 본문을 추가
-                    body: JSON.stringify({
-                        userId: '<USER_ID>', // 사용자 ID 등 필요한 데이터를 추가하세요.
+                    body: new URLSearchParams({
+                        user_id: userId
                     }),
                 });
 
@@ -668,7 +671,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (result.success) {
                     // 모달 닫기
                     $('#resetPasswordModal').modal('hide');
-
+                    hideAllForms(formContainers);
+                    loadData();
                     // 성공 모달 표시
                     $('#editSuccessModal').modal('show');
                 } else {
