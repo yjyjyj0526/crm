@@ -8,9 +8,9 @@
 <div class="registration-container" id="editContainer" th:fragment="editForm">
     <input type="hidden" id="user_id_for_reset" value="">
     <div class="registration-form">
-        <div class="header-container">
-            <h3>社員修正</h3>
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#resetPasswordModal">削除</button>
+        <div class="header-container d-flex justify-content-between align-items-center">
+            <h3 class="mx-auto">社員修正</h3>
+            <button type="button" class="btn btn-danger ml-auto" data-toggle="modal" data-target="#deleteUserModal">削除</button>
         </div>
         <form id="editForm" enctype="multipart/form-data">
             <div class="form-group text-center">
@@ -124,11 +124,66 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                정말로 비밀번호를 초기화하시겠습니까?
+                パスワードを初期化しますか？
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                <button type="button" class="btn btn-danger" id="confirmResetPasswordButton">초기화</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+                <button type="button" class="btn btn-danger" id="confirmResetPasswordButton">初期化</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 비밀번호 초기화 성공 모달 -->
+<div class="modal fade" id="successResetModal" tabindex="-1" aria-labelledby="successResetModalLabel" aria-hidden="true" th:fragment="editFailModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successResetModalLabel">初期化成功</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                パスワードが初期化されました。
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 삭제 모달 -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true" th:fragment="resetPasswordModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">社員情報削除</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                社員情報を削除しますか？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteUserButton">削除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 삭제 성공 모달 -->
+<div class="modal fade" id="successDeleteModal" tabindex="-1" aria-labelledby="successDeleteModalLabel" aria-hidden="true" th:fragment="resetPasswordModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successDeleteModalLabel">社員情報削除成功</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                社員情報が削除されました。
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
             </div>
         </div>
     </div>

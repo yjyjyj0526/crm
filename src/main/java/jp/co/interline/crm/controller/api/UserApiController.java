@@ -280,9 +280,12 @@ public class UserApiController {
 
     //社員削除
     @PostMapping("/delete")
-    public String userDelete(String user_id){
+    public ResponseEntity<Map<String, Object>> userDelete(String user_id){
         service.userDelete(user_id);
-        return "";
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "社員情報削除成功");
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/resetPassword")

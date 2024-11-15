@@ -674,9 +674,51 @@ document.addEventListener('DOMContentLoaded', () => {
                     hideAllForms(formContainers);
                     loadData();
                     // 성공 모달 표시
-                    $('#editSuccessModal').modal('show');
+                    $('#successResetModal').modal('show');
                 } else {
                     throw new Error(result.message || '비밀번호 초기화 실패');
+                }
+            } catch (error) {
+                console.error('Error resetting password:', error);
+
+                // 실패 모달 표시
+                $('#editFailModal').modal('show');
+            }
+        });
+    } else {
+        console.error('confirmResetPasswordButton not found');
+    }
+
+    const deleteUserButton = document.getElementById('confirmDeleteUserButton');
+
+    if (deleteUserButton) {
+        deleteUserButton.addEventListener('click', async function () {
+            try {
+                const userId = document.getElementById('user_id_for_reset').value;
+
+                const response = await fetch('/user/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    // 필요한 경우, 요청 본문을 추가
+                    body: new URLSearchParams({
+                        user_id: userId
+                    }),
+                });
+
+                const result = await response.json();
+
+                // 비밀번호 초기화 성공 여부에 따라 모달 표시
+                if (result.success) {
+                    // 모달 닫기
+                    $('#deleteUserModal').modal('hide');
+                    hideAllForms(formContainers);
+                    loadData();
+                    // 성공 모달 표시
+                    $('#successDeleteModal').modal('show');
+                } else {
+                    throw new Error(result.message || 'ユーザー削除失敗');
                 }
             } catch (error) {
                 console.error('Error resetting password:', error);
