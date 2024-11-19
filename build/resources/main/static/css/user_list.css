@@ -89,7 +89,7 @@ tbody td {
     box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.1), -10px 0 10px -5px rgba(0, 0, 0, 0.04);
     overflow: hidden;
     transition: width 0.3s ease-in-out;
-    z-index: 5;
+    /*z-index: 5;*/
 }
 
 .registration-container.visible {
