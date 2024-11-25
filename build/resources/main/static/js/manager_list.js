@@ -258,6 +258,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return pageItem;
         };
 
+        if (totalPages === 0) totalPages = 1;
+
         paginationContainer.appendChild(createPageItem(1, '<<', currentPage === 1));
         paginationContainer.appendChild(createPageItem(currentPage - 1, '<', currentPage === 1));
 

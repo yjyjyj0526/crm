@@ -201,3 +201,23 @@ tbody td {
     justify-content: space-between;
     align-items: center;
 }
+
+/* 전체 컨테이너를 Flexbox로 설정 */
+.flex-container {
+    display: flex;
+    align-items: center; /* 세로로 가운데 정렬 */
+}
+
+/* 두 개의 input 필드를 동일한 크기로 설정 */
+.flex-input {
+    flex: 1; /* 동일 비율로 너비를 설정 */
+    margin-right: 10px; /* 두 input 필드 사이에 간격을 추가 */
+}
+
+/* 버튼을 감싸는 컨테이너를 Flexbox로 설정 */
+.flex-button-container {
+    flex: 1; /* 버튼 컨테이너의 너비를 설정 */
+    display: flex;
+    justify-content: center; /* 가로로 가운데 정렬 */
+    align-items: center; /* 세로로 가운데 정렬 */
+}

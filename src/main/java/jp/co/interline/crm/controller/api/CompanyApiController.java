@@ -32,6 +32,7 @@ public class CompanyApiController {
                                              @RequestParam(value = "phone_number", required = false) String phone_number,
                                              @RequestParam("post_number") String post_number,
                                              @RequestParam("address") String address,
+                                             @RequestParam("detail_address") String detail_address,
                                              @RequestParam("homepage") String homepage,
                                              @RequestParam(value = "business_type", required = false) String business_type,
                                              @RequestParam("contract_type") String contract_type,
@@ -50,6 +51,7 @@ public class CompanyApiController {
             company.setPhone_number(phone_number);
             company.setPost_number(post_number);
             company.setAddress(address);
+            company.setDetail_address(detail_address);
             company.setHomepage(homepage);
             company.setBusiness_type(business_type);
             company.setContract_type(contract_type);
@@ -139,18 +141,16 @@ public class CompanyApiController {
     }
 
     @GetMapping(value = "/details/{company_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Object>> companyDetails(@PathVariable int company_id) {
+    public ResponseEntity<ClientCompany> companyDetails(@PathVariable int company_id) {
         ClientCompany company = service.companyDetails(company_id);
         if (company != null) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("company", company);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(company);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
-    @GetMapping("/edit/{company_id}")
+    @GetMapping(value = "/edit/{company_id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ClientCompany> getUserEditInfo(@PathVariable int company_id) {
         ClientCompany company = service.companyDetails(company_id);
         if (company != null) {

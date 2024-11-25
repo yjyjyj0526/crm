@@ -73,7 +73,7 @@
     <select id="userList" parameterType="hashmap" resultType="jp.co.interline.crm.domain.UserList">
         SELECT *
         FROM UserList
-        WHERE authority IN (1,2) AND enabled = 1
+        WHERE enabled = 1
         <if test="categorySelect != null and categorySelect != ''">
             <choose>
                 <when test="categorySelect == 'user_id'">

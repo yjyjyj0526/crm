@@ -340,12 +340,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 default:
                     authorityLabel = '未知';
             }
+            let departmentLabel;
+            switch (user.department) {
+                case 'IT':
+                    departmentLabel = 'SI事業部'
+                    break;
+                case 'HR':
+                    departmentLabel = '経営支援部'
+                    break;
+                default:
+                    departmentLabel = '未知';
+            }
 
             row.innerHTML = `
         <td>${user.user_id}</td>
         <td>${user.user_name}</td>
         <td>${user.phone_number}</td>
-        <td>${user.department}</td>
+        <td>${departmentLabel}</td>
         <td>${authorityLabel}</td>
         <td>
             <button class="btn btn-info detailButton" data-id="${user.user_id}">詳細</button>
@@ -385,6 +396,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return pageItem;
         };
+
+        if (totalPages === 0) totalPages = 1;
 
         paginationContainer.appendChild(createPageItem(1, '<<', currentPage === 1));
         paginationContainer.appendChild(createPageItem(currentPage - 1, '<', currentPage === 1));

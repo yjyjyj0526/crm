@@ -7,41 +7,58 @@
     <div class="registration-form">
         <h3>顧客社登録</h3>
         <form id="registrationForm" enctype="multipart/form-data">
-            <div>
+            <div class="form-group">
                 <label for="company_name">顧客社名</label>
                 <input type="text" id="company_name" name="company_name" required class="form-control" />
             </div>
-            <div>
+            <div class="form-group">
                 <label for="CEO_name">代表者名</label>
                 <input type="text" id="CEO_name" name="CEO_name" required class="form-control" />
             </div>
-            <div>
-                <label for="phone_number">電話番号</label>
-                <input type="text" id="phone_number" name="phone_number" required class="form-control" />
+            <div class="form-group">
+                <label for="phone_number_part1">電話番号 <span class="validation-message" id="phoneNumberMessage"></span></label>
+                <div class="form-inline flex-container">
+                    <input type="text" id="phone_number_part1" name="phone_number_part1" maxlength="3" required class="form-control" pattern="\d*" title="数字のみ入力可能です。" />
+                    <input type="text" id="phone_number_part2" name="phone_number_part2" maxlength="4" required class="form-control" pattern="\d*" title="数字のみ入力可能です。" />
+                    <input type="text" id="phone_number_part3" name="phone_number_part3" maxlength="4" required class="form-control" pattern="\d*" title="数字のみ入力可能です。" />
+                </div>
+                <input type="hidden" id="phone_number" name="phone_number" />
             </div>
-            <div>
-                <label for="post_number">郵便番号</label>
-                <input type="text" id="post_number" name="post_number" required class="form-control" />
+            <div class="form-group">
+                <label for="post_number1">郵便番号</label>
+                <div class="form-inline flex-container">
+                    <input type="text" id="post_number1" name="post_number1" required class="form-control flex-input" />
+                    <input type="text" id="post_number2" name="post_number2" required class="form-control flex-input" />
+                    <div class="flex-button-container">
+                        <button type="button" id="searchAddressButton" class="btn btn-primary">住所検索</button>
+                    </div>
+                </div>
             </div>
-            <div>
+            <div class="form-group">
                 <label for="address">住所</label>
-                <input type="number" id="address" name="address" required class="form-control" />
+                <input type="text" id="address" name="address" required class="form-control" />
             </div>
-            <div>
+            <div class="form-group">
+                <label for="detail_address">詳細住所</label>
+                <input type="text" id="detail_address" name="detail_address" required class="form-control" />
+            </div>
+            <div class="form-group">
                 <label for="homepage">ホームページ</label>
-                <input type="number" id="homepage" name="homepage" required class="form-control" />
+                <input type="text" id="homepage" name="homepage" required class="form-control" />
             </div>
-            <div>
+            <div class="form-group">
                 <label for="business_type">業種</label>
-                <input type="number" id="business_type" name="business_type" required class="form-control" />
+                <input type="text" id="business_type" name="business_type" required class="form-control" />
             </div>
-            <div>
+            <div class="form-group">
                 <label for="contract_type">契約方式</label>
-                <input type="number" id="contract_type" name="contract_type" required class="form-control" />
+                <input type="text" id="contract_type" name="contract_type" required class="form-control" />
             </div>
             <input type="hidden" id="register_member_id" name="register_member_id" th:value="${#authentication.name}" />
-            <button type="submit" class="btn btn-success mt-3">등록</button>
-            <button type="button" class="btn btn-secondary mt-3" id="cancelButton">취소</button>
+            <div class="btn-container">
+                <button type="submit" class="btn btn-success mt-3" id="submitButton">登録</button>
+                <button type="button" class="btn btn-secondary mt-3" id="cancelButton">とじる</button>
+            </div>
         </form>
     </div>
 </div>

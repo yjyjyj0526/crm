@@ -26,15 +26,13 @@ public class AdminService {
         if (dao.managerDetails(managerUserID) == null) {
             String encodedPassword = passwordEncoder.encode(managerPassword);
             LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy HH:mm");
-            String formattedDate = now.format(formatter);
 
             UserList managerUser = new UserList();
             managerUser.setUser_id(managerUserID);
             managerUser.setUser_name(managerUserID);
             managerUser.setPassword(encodedPassword);
             managerUser.setAuthority(1);
-            managerUser.setRegistration_date(formattedDate);
+            managerUser.setRegistration_date(String.valueOf(now));
             managerUser.setRegister_member_id(managerUserID);
 
             dao.insertManager(managerUser);

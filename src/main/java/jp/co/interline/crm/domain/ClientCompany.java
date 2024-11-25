@@ -14,6 +14,7 @@ public class ClientCompany {
     private String phone_number;
     private String post_number;
     private String address;
+    private String detail_address;
     private String homepage;
     private String business_type;
     private String contract_type;

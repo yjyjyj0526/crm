@@ -1,74 +1,75 @@
-CREATE TABLE UserList (
-    user_id VARCHAR(30) NOT NULL PRIMARY KEY,
-    user_name VARCHAR(100) NOT NULL,
-    user_name_phonetic VARCHAR(100),
-    password VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(20),
-    email VARCHAR(100),
-    joining_date DATE,
-    date_of_birth VARCHAR(20),
-    department VARCHAR(100),
-    authority INT NOT NULL DEFAULT 1,
-    registration_date DATETIME,
-    register_member_id VARCHAR(30) NOT NULL,
-    update_date DATETIME,
-    update_member_id VARCHAR(30),
-    enabled INT DEFAULT 1,
-    profile_image_path VARCHAR(255)
+create table userlist (
+    user_id varchar(30) not null primary key,
+    user_name varchar(100) not null,
+    user_name_phonetic varchar(100),
+    password varchar(255) not null,
+    phone_number varchar(20),
+    email varchar(100),
+    joining_date date,
+    date_of_birth varchar(20),
+    department varchar(100),
+    authority int not null default 1,
+    registration_date datetime,
+    register_member_id varchar(30) not null,
+    update_date datetime,
+    update_member_id varchar(30),
+    enabled int default 1,
+    profile_image_path varchar(255)
 );
 
-CREATE TABLE ClientCompany (
-	company_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	company_name VARCHAR(100) NOT NULL,
-    CEO_name VARCHAR(100),
-    phone_number VARCHAR(30),
-    post_number VARCHAR(30) NOT NULL,
-    address VARCHAR(255) NOT NULL,
-    homepage VARCHAR(100) NOT NULL,
-    business_type VARCHAR(30),
-    contract_type VARCHAR(30) NOT NULL,
-	registration_date VARCHAR(20) NOT NULL,
-    register_member_id VARCHAR(30) NOT NULL,
-    update_date VARCHAR(20),
-    update_member_id VARCHAR(30)
+create table clientcompany (
+    company_id int not null auto_increment primary key,
+    company_name varchar(100) not null,
+    ceo_name varchar(100),
+    phone_number varchar(30),
+    post_number varchar(30) not null,
+    address varchar(255) not null,
+    detail_address varchar(255),
+    homepage varchar(100) not null,
+    business_type varchar(30),
+    contract_type varchar(30) not null,
+    registration_date varchar(20) not null,
+    register_member_id varchar(30) not null,
+    update_date varchar(20),
+    update_member_id varchar(30)
 );
 
-ALTER TABLE ClientCompany AUTO_INCREMENT = 10001;
+alter table clientcompany auto_increment = 10001;
 
-CREATE TABLE ClientManager (
-    manager_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    manager_name VARCHAR(100) NOT NULL,
-    company_id INT,
-    department VARCHAR(100),
-    position VARCHAR(50),
-    manager_age VARCHAR(30),
-    manager_mail VARCHAR(50),
-    phone_number_1 VARCHAR(30),
-    phone_number_2 VARCHAR(30),
-    registration_date VARCHAR(20) NOT NULL,
-    register_member_id VARCHAR(30) NOT NULL,
-    update_date VARCHAR(20),
-    update_member_id VARCHAR(30)
+create table clientmanager (
+    manager_id int not null auto_increment primary key,
+    manager_name varchar(100) not null,
+    company_id int,
+    department varchar(100),
+    position varchar(50),
+    manager_age varchar(30),
+    manager_mail varchar(50),
+    phone_number_1 varchar(30),
+    phone_number_2 varchar(30),
+    registration_date varchar(20) not null,
+    register_member_id varchar(30) not null,
+    update_date varchar(20),
+    update_member_id varchar(30)
 );
 
-ALTER TABLE ClientManager AUTO_INCREMENT = 20001;
+alter table clientmanager auto_increment = 20001;
 
-CREATE TABLE SalesOpportunity (
-    opportunity_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    opportunity_name VARCHAR(100) NOT NULL,
-    company_id INT NOT NULL,
-    close_date DATETIME,                     -- 종료 날짜
-    registration_date DATETIME NOT NULL,
-    register_member_id VARCHAR(30) NOT NULL,
-    update_date DATETIME,
-    update_member_id VARCHAR(30),
-    notes LONGTEXT,                          -- 비고 또는 추가 정보
-    status INT                  -- 상태 (0:진행 중, 1:완료, 2:보류, 3:취소)
+create table salesopportunity (
+    opportunity_id int not null auto_increment primary key,
+    opportunity_name varchar(100) not null,
+    company_id int not null,
+    close_date datetime,                     -- 종료 날짜
+    registration_date datetime not null,
+    register_member_id varchar(30) not null,
+    update_date datetime,
+    update_member_id varchar(30),
+    notes longtext,                          -- 비고 또는 추가 정보
+    status int                  -- 상태 (0:진행 중, 1:완료, 2:보류, 3:취소)
 );
 
-ALTER TABLE SalesOpportunity AUTO_INCREMENT = 30001;
+alter table salesopportunity auto_increment = 30001;
 
-CREATE TABLE ContactHistory (
+CREATE TABLE contacthistory (
     contact_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     manager_id INT NOT NULL,
     opportunity_id INT,
@@ -83,7 +84,7 @@ CREATE TABLE ContactHistory (
     update_date DATETIME,
     update_member_id VARCHAR(30),
     step INT NOT NULL,
-    order INT NOT NULL
+    `order` INT NOT NULL
 );
 
-ALTER TABLE ContactHistory AUTO_INCREMENT = 40001;
+alter table contacthistory auto_increment = 40001;
